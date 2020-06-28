@@ -9,8 +9,11 @@ then run `script/compile`.
 
 ## Findings
 
-There is a problem with jgit at the moment, but there's a branch of
-tools.gitlibs which replaces jgit with shelling out to git.  See
+There is a problem with jgit at the moment. The output I got was similar to this one: https://bugs.eclipse.org/bugs/show_bug.cgi?id=546175
+Quarkus has a version of jgit that does work with GraalVM, so probably we can borrow their ideas: https://quarkus.io/guides/jgit
+
+Let's move on and skip over this problem for now. 
+There's a branch of tools.gitlibs which replaces jgit with shelling out to git.  See
 https://github.com/ghadishayban/tools.gitlibs/tree/shell-git.
 
 I installed that library locally by checking out the `shell-git` branch,
