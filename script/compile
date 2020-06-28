@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -eou pipefail
+
+app_name=tools-deps-native
+app_ns=borkdude.tdn.main
+
+if [ -z "$GRAALVM_HOME" ]; then
+    echo "Please set GRAALVM_HOME"
+    exit 1
+fi
+
+"$GRAALVM_HOME/bin/gu" install native-image
+
+export JAVA_HOME=$GRAALVM_HOME
+export PATH=$GRAALVM_HOME/bin:$PATH
+
+rm -rf classes
+mkdir classes
+clojure -e "(compile 'borkdude.tdn.main)"
+
+"$GRAALVM_HOME/bin/native-image" \
+    -cp "$(clojure -Spath):classes" \
+    -H:Name=$app_name \
+    -H:+ReportExceptionStackTraces \
+    -H:ReflectionConfigurationFiles=reflection.json \
+    -H:IncludeResources=clojure/tools/deps/deps.edn \
+    "-H:Log=registerResource:" \
+    --initialize-at-build-time \
+    --report-unsupported-elements-at-runtime \
+    --verbose \
+    --no-fallback \
+    --no-server \
+    "-J-Xmx3g" \
+    ${app_ns}

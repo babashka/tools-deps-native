@@ -1,0 +1,4 @@
+{:deps
+ {org.clojure/clojure {:mvn/version "1.10.2-alpha1"}
+  org.clojure/tools.deps.alpha {:mvn/version "0.8.696-shell-git"}}
+ :paths ["src" "resources"]}
