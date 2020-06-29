@@ -7,6 +7,10 @@ This is an experiment to compile tools.deps with GraalVM native-image.
 To compile this project, point `GRAALVM_HOME` at your GraalVM distribution and
 then run `script/compile`.
 
+The build requires
+[`clojure`](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools)
+to be installed.
+
 ## Findings
 
 There is a problem with jgit at the moment. The output I got was similar to this one: https://bugs.eclipse.org/bugs/show_bug.cgi?id=546175
