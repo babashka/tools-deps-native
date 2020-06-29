@@ -50,3 +50,5 @@ I then used `--allow-incomplete-classpath` just to see how far it gets.  I now
 get a NPE in `util/maven.clj` on the line `local-repo-mgr
 (.newLocalRepositoryManager system session local-repo)` where `system` appears
 to be `null`. Might be related to the `--allow-incomplete-classpath`.
+
+Posted an issue in the GraalVM repo [here](https://github.com/oracle/graal/issues/2626).
