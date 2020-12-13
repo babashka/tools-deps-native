@@ -48,5 +48,6 @@ clojure -e "(compile 'borkdude.tdn.main)"
     --initialize-at-run-time=org.eclipse.jgit.transport.AmazonS3 \
     --initialize-at-run-time=org.eclipse.jgit.transport.Transport \
     --initialize-at-run-time=org.eclipse.jgit.transport.TransportAmazonS3 \
+    --allow-incomplete-classpath \
     "-J-Xmx3g" \
     ${app_ns}
