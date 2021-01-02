@@ -2,15 +2,17 @@
   (:require [clojure.tools.deps.alpha :as deps])
   (:gen-class))
 
-(require '[clojure.tools.deps.alpha.extensions :as ext])
-(require '[clojure.tools.deps.alpha.util.maven :as mvn])
+#_(require '[clojure.tools.deps.alpha.extensions :as ext])
+
+(require '[clojure.edn :as edn]
+         '[clojure.tools.deps.alpha.util.maven :as mvn])
 
 (mvn/make-system)
 
 (defn -main [& _args]
-  (prn :mvn/system (mvn/make-system))
-  (prn (ext/coord-paths 'clj-kondo/clj-kondo {:mvn/version "2020.12.12"} :mvn {:mvn/repos clojure.tools.deps.alpha.util.maven/standard-repos}))
-  (prn (-> {:deps '{github-borkdude/babashka.curl
+  #_(prn :mvn/system (mvn/make-system))
+  #_(prn (ext/coord-paths 'clj-kondo/clj-kondo {:mvn/version "2020.12.12"} :mvn {:mvn/repos clojure.tools.deps.alpha.util.maven/standard-repos}))
+  (prn (-> (edn/read-string (first *command-line-args*)) #_{:deps '{github-borkdude/babashka.curl
                     {:git/url "https://github.com/borkdude/babashka.curl"
                      :sha "2dc7f53271de3c2edc3e1474a000b9dfa7324eaf"}}
             :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
