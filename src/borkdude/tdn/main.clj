@@ -5,6 +5,8 @@
 (require '[clojure.tools.deps.alpha.extensions :as ext])
 (require '[clojure.tools.deps.alpha.util.maven :as mvn])
 
+(mvn/make-system)
+
 (defn -main [& _args]
   (prn :mvn/system (mvn/make-system))
   (prn (ext/coord-paths 'clj-kondo/clj-kondo {:mvn/version "2020.12.12"} :mvn {:mvn/repos clojure.tools.deps.alpha.util.maven/standard-repos}))
