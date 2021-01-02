@@ -25,7 +25,6 @@ clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main
     -H:+ReportExceptionStackTraces \
     -H:ReflectionConfigurationFiles=reflection.json \
     "-H:ResourceConfigurationFiles=resources.json" \
-    -H:IncludeResourceBundles=org.eclipse.jgit.internal.JGitText \
     -H:+JNI \
     "-H:Log=registerResource:" \
     "-H:EnableURLProtocols=http,https,jar" \
@@ -46,11 +45,6 @@ clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main
     --initialize-at-run-time=com.jcraft.jsch.agentproxy.connector.SSHAgentConnector \
     --initialize-at-run-time=com.sun.jna.platform.win32.Kernel32 \
     --initialize-at-run-time=com.sun.jna.platform.win32.User32 \
-    --initialize-at-run-time=org.eclipse.jgit.lib.RepositoryCache \
-    --initialize-at-run-time=org.eclipse.jgit.lib.internal.WorkQueue \
-    --initialize-at-run-time=org.eclipse.jgit.transport.AmazonS3 \
-    --initialize-at-run-time=org.eclipse.jgit.transport.Transport \
-    --initialize-at-run-time=org.eclipse.jgit.transport.TransportAmazonS3 \
     --allow-incomplete-classpath \
     "-J-Xmx3g" \
     ${app_ns}
