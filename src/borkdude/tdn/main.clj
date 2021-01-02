@@ -2,8 +2,7 @@
   (:require [clojure.tools.deps.alpha :as deps])
   (:gen-class))
 
-#_(require '[clojure.tools.deps.alpha.extensions :as ext])
-
+(require '[clojure.tools.deps.alpha.extensions]) ;; somehow requiring this namespace as a side effect helps...
 (require '[clojure.edn :as edn]
          '[clojure.tools.deps.alpha.util.maven :as mvn])
 
