@@ -11,13 +11,21 @@ The build requires
 [`clojure`](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools)
 to be installed.
 
-Currently the build stalls after a while:
+After a successful build, there is a `tools-deps-native` binary which you can pass a deps.edn map.
 
-```
-[tools-deps-native:66284]    classlist:   1,975.99 ms,  1.19 GB
-[tools-deps-native:66284]        (cap):   1,513.17 ms,  1.19 GB
-[tools-deps-native:66284]        setup:   2,626.32 ms,  1.19 GB
-^C
-```
+### Shell-git branch
 
-Welcome to help.
+The `master` branch take a long time to compile when using the jgit
+dependency. The `shell-git` branch avoids this as follows:
+
+There's a branch of tools.gitlibs which replaces jgit with shelling out to git.  See
+https://github.com/ghadishayban/tools.gitlibs/tree/shell-git.
+
+I installed that library locally by checking out the `shell-git` branch,
+appending `shell-git` to the version in `pom.xml` and then installed it using
+`mvn -Dmaven.test.skip=true clean install`.
+
+Then I depended on that library in a checkout of tools.deps.alpha, I also
+changed that version by appending `shell-git` and also installed that using `mvn`.
+
+That installation is used in the `deps.edn` of this project.
