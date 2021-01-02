@@ -25,8 +25,11 @@ clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main
     -H:+ReportExceptionStackTraces \
     -H:ReflectionConfigurationFiles=reflection.json \
     "-H:ResourceConfigurationFiles=resources.json" \
+    -H:IncludeResourceBundles=org.eclipse.jgit.internal.JGitText \
     -H:+JNI \
     "-H:Log=registerResource:" \
+    "-H:EnableURLProtocols=http,https,jar" \
+    "--enable-all-security-services" \
     -J-Dclojure.spec.skip-macros=true \
     -J-Dclojure.compiler.direct-linking=true \
     --initialize-at-build-time \
