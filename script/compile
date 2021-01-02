@@ -24,7 +24,7 @@ clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main
     -H:Name=$app_name \
     -H:+ReportExceptionStackTraces \
     -H:ReflectionConfigurationFiles=reflection.json \
-    -H:IncludeResources=clojure/tools/deps/deps.edn \
+    "-H:ResourceConfigurationFiles=resources.json" \
     -H:+JNI \
     "-H:Log=registerResource:" \
     -J-Dclojure.spec.skip-macros=true \
