@@ -1,0 +1,6 @@
+{
+  "resources": [
+    {"pattern": "org/apache/maven/model/pom-4.0.0.xml$"},
+    {"pattern": "clojure/tools/deps/deps.edn"}
+  ]
+}
