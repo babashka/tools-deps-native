@@ -2,6 +2,11 @@
 
 This is an experiment to compile tools.deps with GraalVM native-image.
 
+- [x] resolve mvn deps
+- [x] download mvn deps
+- [x] resolve git deps
+- [ ] download git deps (only works with shell-git branch of tools.gitlibs)
+
 ## Build
 
 To compile this project, point `GRAALVM_HOME` at your GraalVM distribution and
@@ -27,5 +32,3 @@ appending `shell-git` to the version in `pom.xml` and then installed it using
 
 Then I depended on that library in a checkout of tools.deps.alpha, I also
 changed that version by appending `shell-git` and also installed that using `mvn`.
-
-That installation is used in the `deps.edn` of this project.

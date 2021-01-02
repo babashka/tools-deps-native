@@ -16,6 +16,7 @@ export JAVA_HOME=$GRAALVM_HOME
 export PATH=$GRAALVM_HOME/bin:$PATH
 
 rm -rf classes
+rm -rf tools-deps-native # should not be necessary, but just in case
 mkdir classes
 clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main)"
 
@@ -46,5 +47,6 @@ clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main
     --initialize-at-run-time=com.sun.jna.platform.win32.Kernel32 \
     --initialize-at-run-time=com.sun.jna.platform.win32.User32 \
     --allow-incomplete-classpath \
-    "-J-Xmx3g" \
+    --trace-object-instantiation=java.lang.Thread \
+    "-J-Xmx5g" \
     ${app_ns}
