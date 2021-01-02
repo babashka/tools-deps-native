@@ -17,7 +17,7 @@ export PATH=$GRAALVM_HOME/bin:$PATH
 
 rm -rf classes
 mkdir classes
-clojure -e "(compile 'borkdude.tdn.main)"
+clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main)"
 
 "$GRAALVM_HOME/bin/native-image" \
     -cp "$(clojure -Spath):classes" \
