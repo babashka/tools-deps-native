@@ -2,6 +2,11 @@
 
 This is an experiment to compile tools.deps with GraalVM native-image.
 
+- [x] resolve mvn deps
+- [ ] download mvn deps
+- [x] resolve git deps
+- [ ] download git deps (only works with shell-git branch of tools.gitlibs)
+
 ## Build
 
 To compile this project, point `GRAALVM_HOME` at your GraalVM distribution and

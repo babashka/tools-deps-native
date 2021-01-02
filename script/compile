@@ -16,6 +16,7 @@ export JAVA_HOME=$GRAALVM_HOME
 export PATH=$GRAALVM_HOME/bin:$PATH
 
 rm -rf classes
+rm -rf tools-deps-native # should not be necessary, but just in case
 mkdir classes
 clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main)"
 
@@ -52,5 +53,6 @@ clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main
     --initialize-at-run-time=org.eclipse.jgit.transport.Transport \
     --initialize-at-run-time=org.eclipse.jgit.transport.TransportAmazonS3 \
     --allow-incomplete-classpath \
-    "-J-Xmx3g" \
+    --trace-object-instantiation=java.lang.Thread \
+    "-J-Xmx5g" \
     ${app_ns}
