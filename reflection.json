@@ -1,4 +1,11 @@
 [{"name": "org.apache.maven.project.ReactorModelPool",
   "allPublicMethods" : true,
   "allPublicFields" : true,
-  "allPublicConstructors" : true}]
+  "allPublicConstructors" : true}
+ ,
+ {"name": "org.apache.maven.settings.DefaultMavenSettingsBuilder",
+  "fields" : [
+    { "name" : "settingsBuilder" }
+  ]
+ }
+]

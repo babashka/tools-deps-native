@@ -2,8 +2,12 @@
   (:require [clojure.tools.deps.alpha :as deps])
   (:gen-class))
 
+(require '[clojure.tools.deps.alpha.extensions :as ext])
+(require 'clojure.tools.deps.alpha.util.maven)
+
 (defn -main [& _args]
-  (prn (-> {:deps '{github-borkdude/babashka.curl
+  (prn (ext/coord-paths 'clj-kondo/clj-kondo {:mvn/version "2020.12.12"} :mvn {:mvn/repos clojure.tools.deps.alpha.util.maven/standard-repos}))
+  #_(prn (-> {:deps '{github-borkdude/babashka.curl
                     {:git/url "https://github.com/borkdude/babashka.curl"
                      :sha "2dc7f53271de3c2edc3e1474a000b9dfa7324eaf"}}
             :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
