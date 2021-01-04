@@ -3,7 +3,7 @@
 This is an experiment to compile tools.deps with GraalVM native-image.
 
 - [x] resolve mvn deps
-- [ ] download mvn deps
+- [x] download mvn deps
 - [x] resolve git deps
 - [ ] download git deps (only works with shell-git branch of tools.gitlibs)
 
