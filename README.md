@@ -5,7 +5,16 @@ This is an experiment to compile tools.deps with GraalVM native-image.
 - [x] resolve mvn deps
 - [x] download mvn deps
 - [x] resolve git deps
-- [ ] download git deps (only works with shell-git branch of tools.gitlibs)
+- [x] download git deps
+
+## Run
+
+``` shell
+$ tools-deps-native '{:deps {babashka/fs {:git/url "https://github.com/babashka/fs.git" :sha "bc4bd8efe29e9000c941877b02584555f0874988"}}}'
+Cloning: https://github.com/babashka/fs.git
+Checking out: https://github.com/babashka/fs.git at bc4bd8efe29e9000c941877b02584555f0874988
+"/Users/borkdude/.gitlibs/libs/babashka/fs/bc4bd8efe29e9000c941877b02584555f0874988/src:/Users/borkdude/.m2/repository/org/clojure/clojure/1.10.1/clojure-1.10.1.jar:/Users/borkdude/.m2/repository/org/clojure/core.specs.alpha/0.2.44/core.specs.alpha-0.2.44.jar:/Users/borkdude/.m2/repository/org/clojure/spec.alpha/0.2.176/spec.alpha-0.2.176.jar"
+```
 
 ## Build
 
@@ -17,20 +26,3 @@ The build requires
 to be installed.
 
 After a successful build, there is a `tools-deps-native` binary which you can pass a deps.edn map.
-
-### Shell-git branch
-
-The `master` branch take a long time to compile when using the jgit
-dependency. The `shell-git` branch avoids this as follows:
-
-There's a branch of tools.gitlibs which replaces jgit with shelling out to git.  See
-https://github.com/ghadishayban/tools.gitlibs/tree/shell-git.
-
-I installed that library locally by checking out the `shell-git` branch,
-appending `shell-git` to the version in `pom.xml` and then installed it using
-`mvn -Dmaven.test.skip=true clean install`.
-
-Then I depended on that library in a checkout of tools.deps.alpha, I also
-changed that version by appending `shell-git` and also installed that using `mvn`.
-
-That installation is used in the `deps.edn` of this project.
