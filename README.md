@@ -17,6 +17,13 @@ scripts, but it might also have other use cases.
 The official Clojure CLI has classpath caching. This tool is about as fast as
 that _without any_ caching if the deps are already downloaded.
 
+## Install
+
+A pre-release binary for macOS is available
+[here](https://github.com/borkdude/tools-deps-native-experiment/releases/tag/0.0.1-SNAPSHOT).
+
+Other operation systems or for more up to date builds: see [build](#build).
+
 ## Run
 
 As of now the binary accepts a `deps.edn` literal map or file and returns the classpath as a string.
