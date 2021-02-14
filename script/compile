@@ -52,7 +52,7 @@ args=(-cp "$(clojure -Spath):classes"
       --initialize-at-run-time=org.eclipse.jgit.transport.Transport
       --initialize-at-run-time=org.eclipse.jgit.transport.TransportAmazonS3
       --allow-incomplete-classpath
-      # --trace-object-instantiation=java.lang.Thread
+      --trace-object-instantiation=java.lang.Thread
       "-J-Xmx5g"
       "${app_ns}"
      )
