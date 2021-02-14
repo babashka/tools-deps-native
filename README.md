@@ -15,7 +15,7 @@ the namespace in babashka that downloads deps from clojars that can be used in
 scripts, but it might also have other use cases.
 
 The official Clojure CLI has classpath caching. This tool is about as fast as
-that _without any_ caching if the deps are already downloaded.
+that _without any_ caching.
 
 ## Install
 
