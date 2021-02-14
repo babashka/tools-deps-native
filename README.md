@@ -7,6 +7,16 @@ This is an [experiment](#issues) to compile tools.deps with GraalVM native-image
 - [x] resolve git deps
 - [x] download git deps
 
+## Why
+
+Not needing a JVM for dependency resolution and downloading can speed up things
+(you don't pay the startup time). I might want to use this for `babashka.deps`,
+the namespace in babashka that downloads deps from clojars that can be used in
+scripts, but it might also have other use cases.
+
+The official Clojure CLI has classpath caching. This tool is about as fast as
+that _without any_ caching if the deps are already downloaded.
+
 ## Run
 
 As of now the binary accepts a `deps.edn` literal map or file and returns the classpath as a string.
