@@ -19,10 +19,13 @@ that _without any_ caching.
 
 ## Install
 
-A pre-release binary for macOS is available
+A pre-release binaries for macOS and linux are available
 [here](https://github.com/borkdude/tools-deps-native-experiment/releases/tag/0.0.1-SNAPSHOT).
 
-Other operation systems or for more up to date builds: see [build](#build).
+You can also visit the CircleCI builds for more up to date binaries and download
+them from the artifacts.
+
+To build from source yourself: see [build](#build).
 
 ## Run
 
