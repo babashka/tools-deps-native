@@ -10,7 +10,7 @@ This is an [experiment](#issues) to compile tools.deps with GraalVM native-image
 ## Why
 
 Not needing a JVM for dependency resolution and downloading can speed up things
-(you don't pay the startup time). I might want to use this for `babashka.deps`,
+(you don't pay the startup time). I might want to use this for [babashka.deps](https://book.babashka.org/#babashkadeps),
 the namespace in babashka that downloads deps from clojars that can be used in
 scripts, but it might also have other use cases.
 
