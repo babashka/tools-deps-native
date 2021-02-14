@@ -1,6 +1,6 @@
 # tools-deps-native
 
-This is an experiment to compile tools.deps with GraalVM native-image.
+This is an [experiment](#issues) to compile tools.deps with GraalVM native-image.
 
 - [x] resolve mvn deps
 - [x] download mvn deps
