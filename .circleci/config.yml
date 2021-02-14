@@ -79,10 +79,10 @@ jobs:
           command: |
             script/compile
           no_output_timeout: 30m
-      - run:
-          name: Run tests
-          command: |
-            script/test
+      # - run:
+      #     name: Run tests
+      #     command: |
+      #       script/test
       # - run:
       #     name: Performance report
       #     command: |
@@ -139,10 +139,10 @@ jobs:
           command: |
             script/compile
           no_output_timeout: 30m
-      - run:
-          name: Run tests
-          command: |
-            script/test
+      # - run:
+      #     name: Run tests
+      #     command: |
+      #       script/test
       # - run:
       #     name: Performance report
       #     command: |
