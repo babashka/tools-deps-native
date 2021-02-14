@@ -194,7 +194,7 @@ workflows:
   version: 2
   ci:
     jobs:
-      - jvm
+#      - jvm
       - linux
       - mac
       - deploy:
@@ -202,7 +202,7 @@ workflows:
             branches:
               only: master
           requires:
-            - jvm
+#            - jvm
             - linux
             - mac
       # - docker:
