@@ -37,6 +37,7 @@ jobs:
   #           - ~/.m2
   #         key: v1-dependencies-{{ checksum "deps.edn" }}
   linux:
+    resource_class: large
     docker:
       - image: circleci/clojure:lein-2.9.3-buster
     working_directory: ~/repo
@@ -101,6 +102,7 @@ jobs:
   mac:
     macos:
       xcode: "12.0.0"
+    resource_class: large
     environment:
       GRAALVM_HOME: /Users/distiller/graalvm-ce-java11-21.0.0/Contents/Home
       APP_PLATFORM: macos # used in release script
