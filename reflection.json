@@ -3,40 +3,6 @@
   "allPublicFields" : true,
   "allPublicConstructors" : true}
  ,
- {"name": "org.eclipse.jgit.internal.JGitText",
-  "allPublicMethods" : true,
-  "allPublicFields" : true,
-  "allPublicConstructors" : true
- },
- {"name": "org.eclipse.jgit.lib.CoreConfig$HideDotFiles",
-  "allPublicMethods" : true,
-  "allPublicFields" : true,
-  "allPublicConstructors" : true
- }
- ,
- {"name": "org.eclipse.jgit.lib.CoreConfig$AutoCRLF",
-  "allPublicMethods" : true,
-  "allPublicFields" : true,
-  "allPublicConstructors" : true
- }
- ,
- {"name": "org.eclipse.jgit.lib.CoreConfig$EOL",
-  "allPublicMethods" : true,
-  "allPublicFields" : true,
-  "allPublicConstructors" : true
- },
- {"name": "org.eclipse.jgit.lib.CoreConfig$CheckStat",
-  "allPublicMethods" : true,
-  "allPublicFields" : true,
-  "allPublicConstructors" : true
- }
- ,
- {"name": "org.eclipse.jgit.lib.CoreConfig$SymLinks",
-  "allPublicMethods" : true,
-  "allPublicFields" : true,
-  "allPublicConstructors" : true
- }
- ,
  {"name": "org.apache.maven.settings.DefaultMavenSettingsBuilder",
   "fields" : [
     { "name" : "settingsBuilder" }

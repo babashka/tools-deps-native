@@ -25,7 +25,6 @@ args=(-cp "$(clojure -Spath):classes"
       -H:+ReportExceptionStackTraces
       -H:ReflectionConfigurationFiles=reflection.json
       "-H:ResourceConfigurationFiles=resources.json"
-      -H:IncludeResourceBundles=org.eclipse.jgit.internal.JGitText
       -H:+JNI
       "-H:Log=registerResource:"
       "-H:EnableURLProtocols=http,https,jar"
@@ -37,20 +36,6 @@ args=(-cp "$(clojure -Spath):classes"
       --verbose
       --no-fallback
       --no-server
-      --initialize-at-run-time=com.jcraft.jsch.PortWatcher
-      --initialize-at-run-time=com.jcraft.jsch.agentproxy.ConnectorFactory
-      --initialize-at-run-time=com.jcraft.jsch.agentproxy.ConnectorFactory\$Default
-      --initialize-at-run-time=com.jcraft.jsch.agentproxy.connector.PageantConnector
-      --initialize-at-run-time=com.jcraft.jsch.agentproxy.connector.PageantConnector\$Kernel32
-      --initialize-at-run-time=com.jcraft.jsch.agentproxy.connector.PageantConnector\$User32
-      --initialize-at-run-time=com.jcraft.jsch.agentproxy.connector.SSHAgentConnector
-      --initialize-at-run-time=com.sun.jna.platform.win32.Kernel32
-      --initialize-at-run-time=com.sun.jna.platform.win32.User32
-      --initialize-at-run-time=org.eclipse.jgit.lib.RepositoryCache
-      --initialize-at-run-time=org.eclipse.jgit.lib.internal.WorkQueue
-      --initialize-at-run-time=org.eclipse.jgit.transport.AmazonS3
-      --initialize-at-run-time=org.eclipse.jgit.transport.Transport
-      --initialize-at-run-time=org.eclipse.jgit.transport.TransportAmazonS3
       --allow-incomplete-classpath
       --trace-object-instantiation=java.lang.Thread
       "-J-Xmx5g"
