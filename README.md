@@ -56,6 +56,20 @@ to be installed.
 
 After a successful build, there is a `tools-deps-native` binary which you can pass a deps.edn map.
 
+### Shell branch
+
+The `master` branch takes a long time to compile when using the jgit
+dependency. The `shell` branch avoids this as follows:
+
+There's a branch of tools.gitlibs which replaces jgit with shelling out to git.  See
+https://github.com/clojure/tools.gitlibs/tree/shell
+
+I installed that library locally by checking out the `shell` branch,
+appending `shell` to the version in `pom.xml` and then installed it using
+`mvn -Dmaven.test.skip=true clean install`.
+
+After that you should be able to run `script/compile` and get the `tools-deps-native` binary as usual.
+
 ## Issues
 
 This project should be considered experimental due to the following issues, which sometimes (indetermincally) occur. Any help triaging these issues is welcome.

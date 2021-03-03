@@ -1,6 +1,7 @@
 {:deps
  {org.clojure/clojure {:mvn/version "1.10.2-rc1"}
   org.clojure/tools.deps.alpha {:mvn/version "0.9.857"}
+  org.clojure/tools.gitlibs {:mvn/version "1.0.101-SNAPSHOT-shell"}
   org.slf4j/slf4j-jdk14        {:mvn/version "1.7.9"}
   javax.xml.bind/jaxb-api      {:mvn/version "2.3.1"}}
  :paths ["src" "resources"]}
