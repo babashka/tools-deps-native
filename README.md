@@ -58,8 +58,8 @@ After a successful build, there is a `tools-deps-native` binary which you can pa
 
 ### Shell branch
 
-The `master` branch takes a long time to compile when using the jgit
-dependency. The `shell` branch avoids this as follows:
+The `master` branch, using the jgit dependency, has some [issues](#issues). The
+`shell` branch avoids this by shelling out to git instead. It works like this:
 
 There's a branch of tools.gitlibs which replaces jgit with shelling out to git.  See
 https://github.com/clojure/tools.gitlibs/tree/shell
