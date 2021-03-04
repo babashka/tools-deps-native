@@ -48,8 +48,10 @@
 (require '[clojure.edn :as edn]
          '[clojure.tools.deps.alpha.util.maven :as mvn])
 
+(set! *warn-on-reflection* true)
+
 ;; avoid null pointer
-(mvn/make-system)
+#_(mvn/make-system)
 
 (defn the-locator []
   (let [^DefaultServiceLocator loc
@@ -76,9 +78,13 @@
     (.setLocalRepositoryManager session local-repo-mgr)
     (.setTransferListener session mvn/console-listener)
     (.setCache session (DefaultRepositoryCache.))
-    (doseq [^Server server (.getServers (#'mvn/get-settings))]
+    (doseq [^Server server (.getServers ^Settings (#'mvn/get-settings))]
       (mvn/add-server-config session server))
     session))
+
+(defn make-system
+  ^RepositorySystem []
+  (.getService ^ServiceLocator @the-locator RepositorySystem))
 
 (defn -main [& args]
   (try
