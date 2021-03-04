@@ -64,10 +64,26 @@
         (printerrln "Warning: failed to load the S3TransporterFactory class")
         loc))))
 
+(def sentinel (Object.))
+
+(defn make-session
+  ^RepositorySystemSession [^RepositorySystem system local-repo]
+  (locking sentinel
+    (prn :system system)
+    (prn :local-repo local-repo))
+  (let [session (MavenRepositorySystemUtils/newSession)
+        local-repo-mgr (.newLocalRepositoryManager system session (mvn/make-local-repo local-repo))]
+    (.setLocalRepositoryManager session local-repo-mgr)
+    (.setTransferListener session mvn/console-listener)
+    (.setCache session (DefaultRepositoryCache.))
+    (doseq [^Server server (.getServers (#'mvn/get-settings))]
+      (mvn/add-server-config session server))
+    session))
+
 (defn -main [& args]
   (try
     (let [l (the-locator)]
-      (/ 1 0)
+      (alter-var-root #'clojure.tools.deps.alpha.util.maven/make-session (constantly make-session))
       (alter-var-root #'clojure.tools.deps.alpha.util.maven/the-locator (constantly (delay (prn :delay!)
                                                                                            (prn :l l)
                                                                                            l))))
