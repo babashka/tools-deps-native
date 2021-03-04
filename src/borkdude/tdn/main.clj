@@ -53,7 +53,7 @@
 ;; avoid null pointer
 #_(mvn/make-system)
 
-(defn the-locator []
+(defn the-locator-fn []
   (let [^DefaultServiceLocator loc
         (doto (MavenRepositorySystemUtils/newServiceLocator)
           (.addService RepositoryConnectorFactory BasicRepositoryConnectorFactory)
@@ -68,12 +68,18 @@
 
 (def sentinel (Object.))
 
+(defn make-system
+  ^RepositorySystem []
+  (.getService ^ServiceLocator @clojure.tools.deps.alpha.util.maven/the-locator RepositorySystem))
+
 (defn make-session
   ^RepositorySystemSession [^RepositorySystem system local-repo]
   (locking sentinel
     (prn :system system)
     (prn :local-repo local-repo))
-  (let [session (MavenRepositorySystemUtils/newSession)
+  (let [system (make-system)
+        _ (prn :sys2 system)
+        session (MavenRepositorySystemUtils/newSession)
         local-repo-mgr (.newLocalRepositoryManager system session (mvn/make-local-repo local-repo))]
     (.setLocalRepositoryManager session local-repo-mgr)
     (.setTransferListener session mvn/console-listener)
@@ -82,13 +88,10 @@
       (mvn/add-server-config session server))
     session))
 
-(defn make-system
-  ^RepositorySystem []
-  (.getService ^ServiceLocator @the-locator RepositorySystem))
-
 (defn -main [& args]
+  (prn :make-system (make-system))
   (try
-    (let [l (the-locator)]
+    (let [l (the-locator-fn)]
       (alter-var-root #'clojure.tools.deps.alpha.util.maven/make-session (constantly make-session))
       (alter-var-root #'clojure.tools.deps.alpha.util.maven/the-locator (constantly (delay (prn :delay!)
                                                                                            (prn :l l)
