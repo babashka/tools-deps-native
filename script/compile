@@ -18,7 +18,7 @@ export PATH=$GRAALVM_HOME/bin:$PATH
 rm -rf classes
 rm -rf tools-deps-native # should not be necessary, but just in case
 mkdir classes
-clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main)"
+clojure -J-Dclojure.compiler.direct-linking=false -e "(compile 'borkdude.tdn.main)"
 
 args=(-cp "$(clojure -Spath):classes"
       "-H:Name=$app_name"
@@ -29,8 +29,8 @@ args=(-cp "$(clojure -Spath):classes"
       "-H:Log=registerResource:"
       "-H:EnableURLProtocols=http,https,jar"
       "--enable-all-security-services"
-      -J-Dclojure.spec.skip-macros=true
-      -J-Dclojure.compiler.direct-linking=true
+      # -J-Dclojure.spec.skip-macros=true
+      # -J-Dclojure.compiler.direct-linking=true
       --initialize-at-build-time
       --report-unsupported-elements-at-runtime
       --verbose
