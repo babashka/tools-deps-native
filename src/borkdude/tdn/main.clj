@@ -44,9 +44,16 @@
     [org.codehaus.plexus.util.xml Xpp3Dom])
   (:gen-class))
 
-#_(require '[clojure.tools.deps.alpha.extensions :as ext]) ;; somehow requiring this namespace as a side effect helps...
+(require 'clojure.tools.deps.alpha.extensions
+         'clojure.tools.deps.alpha.extensions.deps
+         'clojure.tools.deps.alpha.extensions.git
+         'clojure.tools.deps.alpha.extensions.local
+         'clojure.tools.deps.alpha.extensions.maven
+         'clojure.tools.deps.alpha.extensions.pom)
+
 (require '[clojure.edn :as edn]
-         '[clojure.tools.deps.alpha.util.maven :as mvn])
+         '[clojure.tools.deps.alpha.util.maven :as mvn]
+         )
 
 (set! *warn-on-reflection* true)
 
@@ -70,6 +77,7 @@
 
 (defn make-system
   ^RepositorySystem []
+  (prn :locator @clojure.tools.deps.alpha.util.maven/the-locator)
   (.getService ^ServiceLocator @clojure.tools.deps.alpha.util.maven/the-locator RepositorySystem))
 
 (defn make-session
