@@ -99,5 +99,5 @@
                (deps/resolve-deps nil)
                (deps/make-classpath nil nil))))
     (catch Exception e
-      (prn :exception (.getName (class e)))
+      (prn :exception e #_(.getName (class e)))
       (stack/print-stack-trace e))))
