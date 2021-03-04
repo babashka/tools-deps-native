@@ -1,5 +1,6 @@
 (ns borkdude.tdn.main
-  (:require [clojure.java.io :as io]
+  (:require [clojure.stacktrace :as stack]
+            [clojure.java.io :as io]
             [clojure.tools.deps.alpha :as deps]
             [clojure.tools.deps.alpha.util.io :refer [printerrln]])
   (:import
@@ -64,16 +65,22 @@
         loc))))
 
 (defn -main [& args]
-  (let [l (the-locator)]
-    (alter-var-root #'clojure.tools.deps.alpha.util.maven/the-locator (constantly (delay l))))
-  (let [arg (or (first args) "{:deps {org.clojure/clojure {:mvn/version \"1.10.2\"}}}")
-        edn-str (if (.exists (io/file arg))
-                  (slurp arg)
-                  arg)]
-    (prn (-> (edn/read-string edn-str)
-             (update :mvn/repos (fn [repos]
-                                  (or repos
-                                      {"central" {:url "https://repo1.maven.org/maven2/"}
-                                       "clojars" {:url "https://repo.clojars.org/"}})))
-             (deps/resolve-deps nil)
-             (deps/make-classpath nil nil)))))
+  (try
+    (let [l (the-locator)]
+      (/ 1 0)
+      (alter-var-root #'clojure.tools.deps.alpha.util.maven/the-locator (constantly (delay (prn :delay!)
+                                                                                           (prn :l l)
+                                                                                           l))))
+    (let [arg (or (first args) "{:deps {org.clojure/clojure {:mvn/version \"1.10.2\"}}}")
+          edn-str (if (.exists (io/file arg))
+                    (slurp arg)
+                    arg)]
+      (prn (-> (edn/read-string edn-str)
+               (update :mvn/repos (fn [repos]
+                                    (or repos
+                                        {"central" {:url "https://repo1.maven.org/maven2/"}
+                                         "clojars" {:url "https://repo.clojars.org/"}})))
+               (deps/resolve-deps nil)
+               (deps/make-classpath nil nil))))
+    (catch Exception e
+      (stack/print-stack-trace e))))
