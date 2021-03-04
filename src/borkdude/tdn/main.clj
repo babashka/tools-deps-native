@@ -58,7 +58,7 @@
 (set! *warn-on-reflection* true)
 
 ;; avoid null pointer
-#_(mvn/make-system)
+(mvn/make-system)
 
 (defn the-locator-fn []
   (let [^DefaultServiceLocator loc
