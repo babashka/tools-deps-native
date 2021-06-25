@@ -77,7 +77,7 @@
   (let [mirrors (.getMirrors settings)
         selector (DefaultMirrorSelector.)]
     (run! (fn [^Mirror mirror] (.add selector
-                                 (.getName mirror)
+                                 (.getId mirror)
                                  (.getUrl mirror)
                                  (.getLayout mirror)
                                  false
@@ -109,8 +109,10 @@
         builder (RemoteRepository$Builder. name "default" url)
         maybe-repo (.build builder)
         mirror (select-mirror settings maybe-repo)
-        proxy (select-proxy settings (or mirror maybe-repo))
-        ^Server server-setting (->> (.getServers settings) (filter #(= name (.getId ^Server %))) first)]
+        ^RemoteRepository remote-repo (or mirror maybe-repo)
+        proxy (select-proxy settings remote-repo)
+        server-id (.getId remote-repo)
+        ^Server server-setting (->> (.getServers settings) (filter #(= server-id (.getId ^Server %))) first)]
     (->
       (cond-> builder
         mirror (.setUrl (.getUrl mirror))
@@ -132,8 +134,7 @@
 
 ;; Local repository
 
-(def ^:private home (System/getProperty "user.home"))
-(def default-local-repo (.getAbsolutePath (jio/file home ".m2" "repository")))
+(def default-local-repo (.getAbsolutePath (jio/file (System/getProperty "user.home") ".m2" "repository")))
 
 (defn make-local-repo
   ^LocalRepository [^String dir]
@@ -144,8 +145,6 @@
 ;; Delay creation, but then cache Maven ServiceLocator instance
 (def the-locator
   (delay
-    (binding [*out* *err*]
-      (prn :init (System/getProperty "user.home")))
     (let [^DefaultServiceLocator loc
           (doto (MavenRepositorySystemUtils/newServiceLocator)
             (.addService RepositoryConnectorFactory BasicRepositoryConnectorFactory)
