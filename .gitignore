@@ -1,3 +1,6 @@
 tools-deps-native
 .cpcache
 classes
+/*json
+!/resources.json
+/tools-deps-native.build_artifacts.txt
