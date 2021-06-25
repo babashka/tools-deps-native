@@ -1,5 +1,7 @@
 (ns borkdude.tdn.main
-  (:require [clojure.java.io :as io]
+  (:require
+            [clojure.java.io :as io]
+            [clojure.string :as str]
             [clojure.tools.deps.alpha :as deps])
   (:gen-class))
 
@@ -22,3 +24,15 @@
                                        "clojars" {:url "https://repo.clojars.org/"}})))
              (deps/resolve-deps nil)
              (deps/make-classpath nil nil)))))
+
+(defn init-at-build-time [_]
+  (println
+   (->> (map ns-name (all-ns))
+        (remove #(clojure.string/starts-with? % "clojure"))
+        (map #(clojure.string/split (str %) #"\."))
+        (keep butlast)
+        (map #(clojure.string/join "." %))
+        distinct
+        (map munge)
+        (cons "clojure")
+        (str/join ","))))
