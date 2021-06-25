@@ -27,6 +27,8 @@ sleep 1
 
 script/gen-reflect-config.clj clojure -Scp $(clojure -Spath):classes -M -m borkdude.tdn.main '{:deps {babashka/fs {:mvn/version "0.0.1"}}}'
 
+echo "COMPILING"
+
 args=(-cp "$(clojure -Spath):classes"
       "-H:Name=$app_name"
       -H:+ReportExceptionStackTraces
