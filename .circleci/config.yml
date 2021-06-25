@@ -75,6 +75,11 @@ jobs:
               tar xzf graalvm-ce-java11-linux-amd64-21.0.0.tar.gz
             fi
       - run:
+          name: Install bb
+          command: |
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd)
+            sudo mv bb /usr/local/bin
+      - run:
           name: Build binary
           command: |
             script/compile
@@ -134,6 +139,11 @@ jobs:
               curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.0.0/graalvm-ce-java11-darwin-amd64-21.0.0.tar.gz
               tar xzf graalvm-ce-java11-darwin-amd64-21.0.0.tar.gz
             fi
+      - run:
+          name: Install bb
+          command: |
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd)
+            sudo mv bb /usr/local/bin
       - run:
           name: Build binary
           command: |
