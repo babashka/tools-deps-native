@@ -134,7 +134,7 @@
 
 ;; Local repository
 
-(def default-local-repo (.getAbsolutePath (jio/file (System/getProperty "user.home") ".m2" "repository")))
+(def default-local-repo (delay (.getAbsolutePath (jio/file (System/getProperty "user.home") ".m2" "repository"))))
 
 (defn make-local-repo
   ^LocalRepository [^String dir]
