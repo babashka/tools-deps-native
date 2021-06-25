@@ -10,9 +10,10 @@
          '[clojure.tools.deps.alpha.util.maven :as mvn])
 
 ;; avoid null pointer
-(mvn/make-system)
+#_(mvn/make-system)
 
 (defn -main [& args]
+  (mvn/make-system)
   (let [arg (first args)
         edn-str (if (.exists (io/file arg))
                   (slurp arg)
@@ -26,6 +27,7 @@
              (deps/make-classpath nil nil)))))
 
 (defn init-at-build-time [_]
+  (mvn/make-system)
   (println
    (->> (map ns-name (all-ns))
         (remove #(clojure.string/starts-with? % "clojure"))

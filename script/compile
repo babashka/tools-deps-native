@@ -21,12 +21,16 @@ mkdir classes
 clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main)"
 
 init_at_build_time=$(clojure -X borkdude.tdn.main/init-at-build-time)
+
 echo "$init_at_build_time"
+sleep 1
+
+script/gen-reflect-config.clj clojure -Scp $(clojure -Spath):classes -M -m borkdude.tdn.main '{:deps {babashka/fs {:mvn/version "0.0.1"}}}'
 
 args=(-cp "$(clojure -Spath):classes"
       "-H:Name=$app_name"
       -H:+ReportExceptionStackTraces
-      -H:ReflectionConfigurationFiles=reflection.json
+      -H:ReflectionConfigurationFiles=reflect-config-cleaned.json
       "-H:ResourceConfigurationFiles=resources.json"
       -H:+JNI
       "-H:Log=registerResource:"
@@ -34,7 +38,7 @@ args=(-cp "$(clojure -Spath):classes"
       "--enable-all-security-services"
       -J-Dclojure.spec.skip-macros=true
       -J-Dclojure.compiler.direct-linking=true
-      --initialize-at-build-time="$init_at_build_time"
+      --initialize-at-build-time="$init_at_build_time,cognitect.aws,org.slf4j"
       --report-unsupported-elements-at-runtime
       --verbose
       --no-fallback
