@@ -1,6 +1,8 @@
 {:deps
  {org.clojure/clojure {:mvn/version "1.10.2-rc1"}
-  org.clojure/tools.deps.alpha {:mvn/version "0.11.935"}
+  org.clojure/tools.deps.alpha {:git/url "https://github.com/borkdude/tools.deps.alph"
+                                :git/sha "dec88af58b9e6f6e2f1949c94fbd1d93eecc5959"}
+  #_{:mvn/version "0.11.935"}
   org.slf4j/slf4j-jdk14        {:mvn/version "1.7.9"}
   javax.xml.bind/jaxb-api      {:mvn/version "2.3.1"}}
  :paths ["src" "resources"]}
