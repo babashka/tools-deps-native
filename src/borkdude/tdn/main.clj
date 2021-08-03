@@ -7,19 +7,19 @@
 
 #_(require '[clojure.tools.deps.alpha.extensions :as ext]) ;; somehow requiring this namespace as a side effect helps...
 (require '[clojure.edn :as edn]
-         '[clojure.tools.deps.alpha.util.maven :as mvn])
+         #_'[clojure.tools.deps.alpha.util.maven :as mvn])
 
 ;; avoid null pointer
 #_(mvn/make-system)
 
 (defn -main [& args]
-  (mvn/make-system)
+  ;; (mvn/make-system)
   (let [arg (first args)
         edn-str (if (.exists (io/file arg))
                   (slurp arg)
                   arg)]
     (prn (-> (edn/read-string edn-str)
-             (update :mvn/repos (fn [repos]
+             #_(update :mvn/repos (fn [repos]
                                   (or repos
                                       {"central" {:url "https://repo1.maven.org/maven2/"}
                                        "clojars" {:url "https://repo.clojars.org/"}})))
@@ -27,7 +27,7 @@
              (deps/make-classpath nil nil)))))
 
 (defn init-at-build-time [_]
-  (mvn/make-system)
+  ;; (mvn/make-system)
   (println
    (->> (map ns-name (all-ns))
         (remove #(clojure.string/starts-with? % "clojure"))
