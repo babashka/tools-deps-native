@@ -1,8 +1,8 @@
 (ns borkdude.tdn.main
   (:require
-            [clojure.java.io :as io]
-            [clojure.string :as str]
-            [clojure.tools.deps.alpha :as deps])
+   [clojure.java.io :as io]
+   [clojure.string :as str]
+   [clojure.tools.deps.alpha :as deps])
   (:gen-class))
 
 #_(require '[clojure.tools.deps.alpha.extensions :as ext]) ;; somehow requiring this namespace as a side effect helps...
@@ -12,17 +12,19 @@
 ;; avoid null pointer
 #_(mvn/make-system)
 
+(def default-repos
+  {"central" {:url "https://repo1.maven.org/maven2/"}
+   "clojars" {:url "https://repo.clojars.org/"}})
+
 (defn -main [& args]
   (mvn/make-system)
-  (let [arg (first args)
+  (let [arg     (first args)
         edn-str (if (.exists (io/file arg))
                   (slurp arg)
                   arg)]
     (prn (-> (edn/read-string edn-str)
              (update :mvn/repos (fn [repos]
-                                  (or repos
-                                      {"central" {:url "https://repo1.maven.org/maven2/"}
-                                       "clojars" {:url "https://repo.clojars.org/"}})))
+                                  (or repos default-repos)))
              (deps/resolve-deps nil)
              (deps/make-classpath nil nil)))))
 
