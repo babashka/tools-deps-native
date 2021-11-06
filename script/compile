@@ -12,8 +12,12 @@ fi
 
 "$GRAALVM_HOME/bin/gu" install native-image
 
-export JAVA_HOME=$GRAALVM_HOME
-export PATH=$GRAALVM_HOME/bin:$PATH
+# [ ! -x $GRAALVM_HOME/lib/svm/macros/native-image-configure-launcher ] && \
+#     "$GRAALVM_HOME/bin/native-image" --macro:native-image-configure-launcher && \
+#     chmod +x "$GRAALVM_HOME/lib/svm/macros/native-image-configure-launcher"
+
+export JAVA_HOME="$GRAALVM_HOME"
+export PATH="$GRAALVM_HOME/bin:$GRAALVM_HOME/lib/svm/macros:$PATH"
 
 rm -rf classes
 rm -rf tools-deps-native # should not be necessary, but just in case
@@ -25,7 +29,7 @@ init_at_build_time=$(clojure -X borkdude.tdn.main/init-at-build-time)
 echo "$init_at_build_time"
 sleep 1
 
-script/gen-reflect-config.clj clojure -Scp $(clojure -Spath):classes -M:compile '{:deps {babashka/fs {:mvn/version "0.0.1"}}}'
+script/gen-reflect-config.clj $(clojure -Spath):classes
 
 echo "COMPILING"
 

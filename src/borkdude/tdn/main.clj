@@ -1,9 +1,20 @@
 (ns borkdude.tdn.main
   (:require
-   [clojure.java.io :as io]
+   [borkdude.tdn.cli :as cli]
+   [borkdude.tdn.pod :as pod]
    [clojure.string :as str]
-   [clojure.tools.deps.alpha :as deps])
+   [clojure.tools.deps.alpha])
   (:gen-class))
+
+(defmacro reference-publics []
+  (let [publics (-> (the-ns 'clojure.tools.deps.alpha)
+                    ns-publics
+                    keys)]
+    `(def publics# ~(vec (for [sym publics]
+                           (symbol "clojure.tools.deps.alpha"
+                                   (name sym)))))))
+
+(reference-publics)
 
 #_(require '[clojure.tools.deps.alpha.extensions :as ext]) ;; somehow requiring this namespace as a side effect helps...
 (require '[clojure.edn :as edn]
@@ -12,21 +23,13 @@
 ;; avoid null pointer
 #_(mvn/make-system)
 
-(def default-repos
-  {"central" {:url "https://repo1.maven.org/maven2/"}
-   "clojars" {:url "https://repo.clojars.org/"}})
 
 (defn -main [& args]
+  ;; TODO use BABASHKA_POD to detect when running as POD or CLI
   (mvn/make-system)
-  (let [arg     (first args)
-        edn-str (if (.exists (io/file arg))
-                  (slurp arg)
-                  arg)]
-    (prn (-> (edn/read-string edn-str)
-             (update :mvn/repos (fn [repos]
-                                  (or repos default-repos)))
-             (deps/resolve-deps nil)
-             (deps/make-classpath nil nil)))))
+  (if (System/getenv "BABASHKA_POD")
+    (pod/pod args)
+    (cli/cli args)))
 
 (defn init-at-build-time [_]
   (mvn/make-system)
@@ -40,3 +43,6 @@
         (map munge)
         (cons "clojure")
         (str/join ","))))
+
+(comment
+  (init-at-build-time nil))
