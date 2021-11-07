@@ -18,7 +18,7 @@
   (testing "pod can be invoke calc-bais"
     (let [pod-id (pods/load-pod pod-spec)]
       (try
-        (let [res (pods/invoke pod-id 'calc-basis [{}])]
+        (let [res (pods/invoke pod-id 'clojure.tools.deps.alpha/calc-basis [{}])]
           (is (= {:libs {}, :classpath-roots [], :classpath {}}
                  res )))
         (finally
