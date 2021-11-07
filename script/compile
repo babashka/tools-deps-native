@@ -12,10 +12,6 @@ fi
 
 "$GRAALVM_HOME/bin/gu" install native-image
 
-# [ ! -x $GRAALVM_HOME/lib/svm/macros/native-image-configure-launcher ] && \
-#     "$GRAALVM_HOME/bin/native-image" --macro:native-image-configure-launcher && \
-#     chmod +x "$GRAALVM_HOME/lib/svm/macros/native-image-configure-launcher"
-
 export JAVA_HOME="$GRAALVM_HOME"
 export PATH="$GRAALVM_HOME/bin:$GRAALVM_HOME/lib/svm/macros:$PATH"
 
@@ -36,7 +32,7 @@ echo "COMPILING"
 args=(-cp "$(clojure -Spath):classes"
       "-H:Name=$app_name"
       -H:+ReportExceptionStackTraces
-      -H:ReflectionConfigurationFiles=reflect-config-cleaned.json
+      -H:ReflectionConfigurationFiles=reflect-config.json
       "-H:ResourceConfigurationFiles=resources.json"
       -H:+JNI
       "-H:Log=registerResource:"

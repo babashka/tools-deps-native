@@ -9,12 +9,10 @@
    "clojars" {:url "https://repo.clojars.org/"}})
 
 (defn usage []
-  (println "tools.deps.edn [ (deps [path])]")
-  nil)
+  (println "tools.deps.edn [ (deps [path])]"))
 
 (defn help [args]
-  (println "tools.deps.edn [ (deps [path])]")
-  nil)
+  (println "tools.deps.edn [ (deps [path])]"))
 
 (defn slurp-deps
   ([path]
@@ -24,7 +22,6 @@
   ([] (deps/slurp-deps (io/file "deps.edn"))))
 
 (defn create-basis [args]
-  (prn :creat-basis args)
   (let [arg  (first args)
         deps (edn/read-string arg)]
     (if (map? deps)
@@ -41,7 +38,6 @@
         deps (or
               (slurp-deps arg)
               (edn/read-string arg))]
-    (prn :deps deps)
     (if (map? deps)
       (prn (as-> deps x
              (update x :mvn/repos (fn [repos]
