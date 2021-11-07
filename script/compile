@@ -12,27 +12,27 @@ fi
 
 "$GRAALVM_HOME/bin/gu" install native-image
 
-export JAVA_HOME=$GRAALVM_HOME
-export PATH=$GRAALVM_HOME/bin:$PATH
+export JAVA_HOME="$GRAALVM_HOME"
+export PATH="$GRAALVM_HOME/bin:$GRAALVM_HOME/lib/svm/macros:$PATH"
 
 rm -rf classes
 rm -rf tools-deps-native # should not be necessary, but just in case
 mkdir classes
-clojure -J-Dclojure.compiler.direct-linking=true -e "(compile 'borkdude.tdn.main)"
+clojure -M:compile-main
 
 init_at_build_time=$(clojure -X borkdude.tdn.main/init-at-build-time)
 
 echo "$init_at_build_time"
 sleep 1
 
-script/gen-reflect-config.clj clojure -Scp $(clojure -Spath):classes -M -m borkdude.tdn.main '{:deps {babashka/fs {:mvn/version "0.0.1"}}}'
+script/gen-reflect-config.clj $(clojure -Spath):classes
 
 echo "COMPILING"
 
 args=(-cp "$(clojure -Spath):classes"
       "-H:Name=$app_name"
       -H:+ReportExceptionStackTraces
-      -H:ReflectionConfigurationFiles=reflect-config-cleaned.json
+      -H:ReflectionConfigurationFiles=reflect-config.json
       "-H:ResourceConfigurationFiles=resources.json"
       -H:+JNI
       "-H:Log=registerResource:"

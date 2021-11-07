@@ -48,7 +48,7 @@ Checking out: https://github.com/babashka/fs.git at bc4bd8efe29e9000c941877b0258
 ## Build
 
 To compile this project, point `GRAALVM_HOME` at your GraalVM distribution and
-then run `script/compile`. Using GraalVM 21.0.0 Java 11 CE is recommended.
+then run `script/compile`. Using GraalVM 21.3.0 Java 11 CE is recommended.
 
 The build requires
 [`clojure`](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools)
