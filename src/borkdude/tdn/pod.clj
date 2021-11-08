@@ -47,12 +47,17 @@
 
 ;;; Implementation
 
+(defn ns-public-vars [ns-sym]
+  (->> (the-ns ns-sym)
+       ns-publics
+       keys
+       (mapv #(symbol (name ns-sym) (name %)))))
 
 (defmacro dispatch-publics [sym args]
-  (let [publics  (->> (the-ns 'clojure.tools.deps.alpha)
-                      ns-publics
-                      keys
-                      (mapv #(symbol "clojure.tools.deps.alpha" (name %))))
+  (let [publics  (reduce
+                  into []
+                  [(ns-public-vars 'clojure.tools.deps.alpha)
+                   (ns-public-vars 'clojure.tools.deps.alpha.util.maven)])
         args-sym (gensym "args")]
     `(let [~args-sym ~args
            sym#      ~sym]
@@ -86,7 +91,9 @@
 (def description
   {:format     :edn
    :namespaces [{:name 'clojure.tools.deps.alpha
-                 :vars (public-var-maps 'clojure.tools.deps.alpha)}]
+                 :vars (public-var-maps 'clojure.tools.deps.alpha)}
+                {:name 'clojure.tools.deps.alpha.util.maven
+                 :vars (public-var-maps 'clojure.tools.deps.alpha.util.maven)}]
    :opts       {:shutdown {}}})
 
 (defn error-map
