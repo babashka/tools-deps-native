@@ -57,6 +57,7 @@
   (let [publics  (reduce
                   into []
                   [(ns-public-vars 'clojure.tools.deps.alpha)
+                   (ns-public-vars 'clojure.tools.deps.alpha.util.dir)
                    (ns-public-vars 'clojure.tools.deps.alpha.util.maven)])
         args-sym (gensym "args")]
     `(let [~args-sym ~args
@@ -92,6 +93,8 @@
   {:format     :edn
    :namespaces [{:name 'clojure.tools.deps.alpha
                  :vars (public-var-maps 'clojure.tools.deps.alpha)}
+                {:name 'clojure.tools.deps.alpha.util.dir
+                 :vars (public-var-maps 'clojure.tools.deps.alpha.util.dir)}
                 {:name 'clojure.tools.deps.alpha.util.maven
                  :vars (public-var-maps 'clojure.tools.deps.alpha.util.maven)}]
    :opts       {:shutdown {}}})
