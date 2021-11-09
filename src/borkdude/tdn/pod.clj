@@ -47,10 +47,14 @@
 
 ;;; Implementation
 
-(defn ns-public-vars [ns-sym]
+(defn ns-public-syms [ns-sym]
   (->> (the-ns ns-sym)
        ns-publics
-       keys
+       (filter #(not (:macro (meta (second %)))))
+       (mapv key)))
+
+(defn ns-public-vars [ns-sym]
+  (->> (ns-public-syms ns-sym)
        (mapv #(symbol (name ns-sym) (name %)))))
 
 (defmacro dispatch-publics [sym args]
@@ -82,10 +86,13 @@
     (dispatch-publics v args)))
 
 (defn public-var-maps [ns-sym]
-  (->> (ns-publics (the-ns ns-sym))
-       keys
+  (->> (ns-public-syms ns-sym)
        sort
        (mapv (partial hash-map :name))))
+
+(def with-dir
+  (str "(defmacro with-dir [^File dir & body]"
+       " `(binding [*the-dir* (canonicalize ~dir)] ~@body))"))
 
 ;;; pod protocol
 
@@ -94,7 +101,10 @@
    :namespaces [{:name 'clojure.tools.deps.alpha
                  :vars (public-var-maps 'clojure.tools.deps.alpha)}
                 {:name 'clojure.tools.deps.alpha.util.dir
-                 :vars (public-var-maps 'clojure.tools.deps.alpha.util.dir)}
+                 :vars (conj
+                        (public-var-maps 'clojure.tools.deps.alpha.util.dir)
+                        {:name "with-dir"
+                         :code with-dir})}
                 {:name 'clojure.tools.deps.alpha.util.maven
                  :vars (public-var-maps 'clojure.tools.deps.alpha.util.maven)}]
    :opts       {:shutdown {}}})
