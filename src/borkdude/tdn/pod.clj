@@ -1,10 +1,11 @@
 (ns borkdude.tdn.pod
   (:refer-clojure :exclude [read-string])
   (:require
+   [bencode.core :as bencode]
+   [borkdude.tdn.bbuild]
    [clojure.edn :as edn]
    [clojure.tools.deps.alpha]
-   [clojure.walk :as walk]
-   [bencode.core :as bencode])
+   [clojure.walk :as walk])
   (:import
    [java.io PushbackInputStream]))
 
@@ -62,7 +63,8 @@
                   into []
                   [(ns-public-vars 'clojure.tools.deps.alpha)
                    (ns-public-vars 'clojure.tools.deps.alpha.util.dir)
-                   (ns-public-vars 'clojure.tools.deps.alpha.util.maven)])
+                   (ns-public-vars 'clojure.tools.deps.alpha.util.maven)
+                   (ns-public-vars 'borkdude.tdn.bbuild)])
         args-sym (gensym "args")]
     `(let [~args-sym ~args
            sym#      ~sym]
@@ -106,7 +108,9 @@
                         {:name "with-dir"
                          :code with-dir})}
                 {:name 'clojure.tools.deps.alpha.util.maven
-                 :vars (public-var-maps 'clojure.tools.deps.alpha.util.maven)}]
+                 :vars (public-var-maps 'clojure.tools.deps.alpha.util.maven)}
+                {:name 'borkdude.tdn.bbuild
+                 :vars (public-var-maps 'borkdude.tdn.bbuild)}]
    :opts       {:shutdown {}}})
 
 (defn error-map
