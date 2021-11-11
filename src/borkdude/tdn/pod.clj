@@ -63,6 +63,7 @@
                   into []
                   [(ns-public-vars 'clojure.tools.deps.alpha)
                    (ns-public-vars 'clojure.tools.deps.alpha.util.dir)
+                   (ns-public-vars 'clojure.tools.deps.alpha.util.io)
                    (ns-public-vars 'clojure.tools.deps.alpha.util.maven)
                    (ns-public-vars 'borkdude.tdn.bbuild)])
         args-sym (gensym "args")]
@@ -107,6 +108,8 @@
                         (public-var-maps 'clojure.tools.deps.alpha.util.dir)
                         {:name "with-dir"
                          :code with-dir})}
+                {:name 'clojure.tools.deps.alpha.util.io
+                 :vars (public-var-maps 'clojure.tools.deps.alpha.util.io)}
                 {:name 'clojure.tools.deps.alpha.util.maven
                  :vars (public-var-maps 'clojure.tools.deps.alpha.util.maven)}
                 {:name 'borkdude.tdn.bbuild
