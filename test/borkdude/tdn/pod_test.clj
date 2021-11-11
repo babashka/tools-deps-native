@@ -8,9 +8,9 @@
                 "./tools-deps-native"
                 ["clojure" "-Mrun"]))
 
-;; (alter-var-root
-;;  #'borkdude.tdn.pod/client-pod-namespace
-;;  (constantly 'babashka.pods.jvm))
+(alter-var-root
+ #'borkdude.tdn.pod/client-pod-namespace
+ (constantly 'babashka.pods.jvm))
 
 (deftest pod-lifecycle-test
   (testing "pod can be loaded and unloaded"
@@ -22,7 +22,9 @@
   (testing "pod can be invoke calc-bais"
     (let [pod-id (pods/load-pod pod-spec)]
       (try
-        (let [res (pods/invoke pod-id 'clojure.tools.deps.alpha/calc-basis [{}])]
+        (let [res (pods/invoke
+                   pod-id
+                   'clojure.tools.deps.alpha/-pod-calc-basis "." [{}])]
           (is (= {:libs {}, :classpath-roots [], :classpath {}}
                  res )))
         (finally
