@@ -4,6 +4,7 @@
    [bencode.core :as bencode]
    [borkdude.tdn.bbuild]
    [clojure.tools.deps.alpha]
+   [clojure.tools.deps.alpha.util.dir]
    [clojure.walk :as walk]
    [cognitect.transit :as transit])
   (:import
@@ -11,7 +12,7 @@
 
 (set! *warn-on-reflection* true)
 
-(def debug? true)
+(def debug? false)
 
 (defn debug [& strs]
   (when debug?
@@ -107,25 +108,60 @@
 
 ;;; Implementation
 
-(defn ns-public-syms [ns-sym]
+(defn ns-public-syms
+  "Return unqualified syms for all non-macro, non-dynamic vars in ns"
+  [ns-sym]
   (->> (the-ns ns-sym)
        ns-publics
-       (filter #(not (:macro (meta (second %)))))
+       (filter #(and (not (:macro (meta (second %))))
+                     (not (:dynamic (meta (second %))))))
        (mapv key)))
 
-(defn ns-public-vars [ns-sym]
+(defn ns-public-fq-syms [ns-sym]
   (->> (ns-public-syms ns-sym)
        (mapv #(symbol (name ns-sym) (name %)))))
 
-(defmacro dispatch-publics [sym args]
-  (let [publics  (reduce
-                  into []
-                  [(ns-public-vars 'clojure.tools.deps.alpha)
-                   (ns-public-vars 'clojure.tools.deps.alpha.util.dir)
-                   (ns-public-vars 'clojure.tools.deps.alpha.util.io)
-                   (ns-public-vars 'clojure.tools.deps.alpha.util.maven)
-                   (ns-public-vars 'borkdude.tdn.bbuild)])
-        args-sym (gensym "args")]
+(defn wrapped-sym [sym]
+  (symbol (namespace sym) (str "-pod-" (name sym))))
+
+(defn unwrapped-sym [sym]
+  (assert (> (count (name sym)) 5) (name sym))
+  (symbol (namespace sym) (subs (name sym) 5)))
+
+(def dir-var-form
+  '(def ^:dynamic *the-dir*
+     (clojure.java.io/file (System/getProperty "user.dir"))))
+
+(def with-dir-form-str
+  (str
+   "(defmacro with-dir [^File dir & body] "
+   " `(binding [clojure.tools.deps.alpha.util.dir/*the-dir* ~dir] ~@body))"))
+
+(defn client-invoke-with-dir-form
+  [f-sym]
+  `(~'defn ~f-sym [& ~'args]
+    (~(wrapped-sym f-sym)
+     clojure.tools.deps.alpha.util.dir/*the-dir*
+     ~'args)))
+
+(defn pod-apply-with-dir-form [s args-sym]
+  (assert (symbol? s) (str s))
+  (assert (symbol? args-sym) (str args-sym)) ; no need to let bind
+  `(binding [clojure.tools.deps.alpha.util.dir/*the-dir*
+             (clojure.tools.deps.alpha.util.dir/canonicalize (first ~args-sym))]
+     (apply ~s (second ~args-sym))))
+
+(defn dispatch* [sym args]
+  (let [args-sym (gensym "args")
+        invoke-direct-var-syms
+        (ns-public-fq-syms 'borkdude.tdn.bbuild)
+        invoke-with-dir-var-syms
+        (reduce
+         into []
+         [(ns-public-fq-syms 'clojure.tools.deps.alpha)
+          (ns-public-fq-syms 'clojure.tools.deps.alpha.util.dir)
+          (ns-public-fq-syms 'clojure.tools.deps.alpha.util.io)
+          (ns-public-fq-syms 'clojure.tools.deps.alpha.util.maven)])]
     `(let [~args-sym ~args
            sym#      ~sym]
        (case sym#
@@ -134,43 +170,88 @@
               (into forms
                     [s `(apply ~s ~args-sym)]))
             []
-            publics)
+            invoke-direct-var-syms)
+         ~@(reduce
+            (fn [forms s]
+              (into forms
+                    [(wrapped-sym s) (pod-apply-with-dir-form s args-sym)]))
+            []
+            invoke-with-dir-var-syms)
          (throw (ex-info (str "Unknown function: " sym#) {}))))))
 
+(defmacro dispatch [sym args]
+  (dispatch* sym args))
+
 (defn invoke [msg]
-  (let [v    (some->> (get msg "var") read-symbol)
-        _    (debug :invoke :var v)
-        args (some-> (get msg "args") read-payload)]
+  (let [var-sym (some->> (get msg "var") read-symbol)
+        _       (debug :invoke :var var-sym)
+        args    (some-> (get msg "args") read-payload)]
     (debug :invoke :args args)
-    (dispatch-publics v args)))
-
-(defn public-var-maps [ns-sym]
-  (->> (ns-public-syms ns-sym)
-       sort
-       (mapv (partial hash-map :name))))
-
-(def with-dir
-  (str "(defmacro with-dir [^File dir & body]"
-       " `(binding [*the-dir* (canonicalize ~dir)] ~@body))"))
+    (dispatch var-sym args)))
 
 ;;; pod protocol
+
+(defn pr-form [form]
+  (binding [*print-meta* true]
+    (pr-str (vary-meta form dissoc :line :column))))
+
+(defn var-map
+  [sym]
+  {:name sym})
+
+(defn code-map
+  [sym form]
+  {:name sym
+   :code form})
+
+(defn var-maps [syms]
+  (->> syms
+       sort
+       (mapv var-map)))
+
+(defn wrapped-var-maps [syms]
+  (reduce
+   (fn [res s]
+     (into res
+           [(var-map (wrapped-sym s))
+            (code-map s (pr-form
+                         (client-invoke-with-dir-form s)))]))
+   []
+   syms))
+
+(defn public-var-maps [ns-sym]
+  (-> ns-sym
+      ns-public-syms
+      var-maps))
+
+(defn public-wrapped-var-maps [ns-sym]
+  (-> ns-sym
+      ns-public-syms
+      wrapped-var-maps))
 
 (def description
   {:format     :transit+json
    :namespaces [{:name "borkdude.tdn.pod"
                  :vars [{:name '-reg-transit-handlers
                          :code (reg-transit-handlers)} ]}
-                {:name 'clojure.tools.deps.alpha
-                 :vars (public-var-maps 'clojure.tools.deps.alpha)}
+                ;; NOTE: order is important here.  We need to define *the-dir*
+                ;; before anything that refers to it
                 {:name 'clojure.tools.deps.alpha.util.dir
-                 :vars (conj
-                        (public-var-maps 'clojure.tools.deps.alpha.util.dir)
-                        {:name "with-dir"
-                         :code with-dir})}
+                 :vars (into
+                        [{:name "*the-dir*"
+                          :code (pr-form dir-var-form)}
+                         {:name "with-dir"
+                          :code with-dir-form-str}]
+                        (public-wrapped-var-maps
+                         'clojure.tools.deps.alpha.util.dir))}
+                {:name 'clojure.tools.deps.alpha
+                 :vars (public-wrapped-var-maps 'clojure.tools.deps.alpha)}
                 {:name 'clojure.tools.deps.alpha.util.io
-                 :vars (public-var-maps 'clojure.tools.deps.alpha.util.io)}
+                 :vars (public-wrapped-var-maps
+                        'clojure.tools.deps.alpha.util.io)}
                 {:name 'clojure.tools.deps.alpha.util.maven
-                 :vars (public-var-maps 'clojure.tools.deps.alpha.util.maven)}
+                 :vars (public-wrapped-var-maps
+                        'clojure.tools.deps.alpha.util.maven)}
                 {:name 'borkdude.tdn.bbuild
                  :vars (public-var-maps 'borkdude.tdn.bbuild)}]
    :opts       {:shutdown {}}})
@@ -178,7 +259,7 @@
 (defn error-map
   [message data id]
   {"ex-message" message
-   "ex-data"    (pr-str data)
+   "ex-data"    (write-payload data)
    "id"         id
    "status"     ["done" "error"]})
 
