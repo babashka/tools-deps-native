@@ -1,5 +1,6 @@
 {:deps
- {org.clojure/clojure          {:mvn/version "1.10.3"}
+ {com.cognitect/transit-clj    {:mvn/version "1.0.324"}
+  org.clojure/clojure          {:mvn/version "1.10.3"}
   org.clojure/tools.deps.alpha {:mvn/version "0.12.1067"}
   org.slf4j/slf4j-jdk14        {:mvn/version "1.7.9"}
   javax.xml.bind/jaxb-api      {:mvn/version "2.3.1"}
