@@ -3,15 +3,15 @@
   (:require
    [bencode.core :as bencode]
    [borkdude.tdn.bbuild]
-   [clojure.edn :as edn]
    [clojure.tools.deps.alpha]
-   [clojure.walk :as walk])
+   [clojure.walk :as walk]
+   [cognitect.transit :as transit])
   (:import
    [java.io PushbackInputStream]))
 
 (set! *warn-on-reflection* true)
 
-(def debug? false)
+(def debug? true)
 
 (defn debug [& strs]
   (when debug?
@@ -46,6 +46,65 @@
     (fn ident-to-string [v] (if (ident? v) (name v) v))
     m)))
 
+;;; payload
+(def jiofile-key (str ::file))
+
+(def jiofile-read-handler
+  (transit/read-handler (fn [^String s] (java.io.File. s))))
+
+(def jiofile-write-handler
+  (transit/write-handler jiofile-key str))
+
+(def client-pod-namespace 'babashka.pods)
+
+(defn reg-transit-handlers
+  []
+  (format "
+(require '[%s :as --pod])
+
+(--pod/add-transit-read-handler!
+    \"%s\"
+    (fn [s] (java.io.File. s)))
+
+(--pod/add-transit-write-handler!
+  #{java.io.File}
+  \"%s\"
+  str)
+"
+          client-pod-namespace jiofile-key jiofile-key))
+
+(def transit-read-handlers
+  (delay
+    (transit/read-handler-map
+     {jiofile-key jiofile-read-handler})))
+
+(def transit-write-handlers
+  (delay
+    (transit/write-handler-map
+     {java.io.File jiofile-write-handler})))
+
+(defn read-transit [^String v]
+  (transit/read
+   (transit/reader
+    (java.io.ByteArrayInputStream. (.getBytes v "utf-8"))
+    :json
+    {:handlers @transit-read-handlers})))
+
+(defn write-transit [v]
+  (let [baos (java.io.ByteArrayOutputStream.)]
+    (transit/write
+     (transit/writer
+      baos
+      :json
+      {:handlers @transit-write-handlers}) v)
+    (.toString baos "utf-8")))
+
+(defn read-payload [v]
+  (some-> v read-string read-transit))
+
+(defn write-payload [v]
+  (some-> v write-transit))
+
 ;;; Implementation
 
 (defn ns-public-syms [ns-sym]
@@ -79,13 +138,10 @@
          (throw (ex-info (str "Unknown function: " sym#) {}))))))
 
 (defn invoke [msg]
-  (let [v    (some->> (get msg "var")
-                      read-string
-                      symbol
-                                        ;(symbol "clojure.tools.deps.alpha")
-                      #_resolve)
-        args (some-> (get msg "args") read-string edn/read-string)]
-    (debug :invoke :var v :args args)
+  (let [v    (some->> (get msg "var") read-symbol)
+        _    (debug :invoke :var v)
+        args (some-> (get msg "args") read-payload)]
+    (debug :invoke :args args)
     (dispatch-publics v args)))
 
 (defn public-var-maps [ns-sym]
@@ -100,8 +156,11 @@
 ;;; pod protocol
 
 (def description
-  {:format     :edn
-   :namespaces [{:name 'clojure.tools.deps.alpha
+  {:format     :transit+json
+   :namespaces [{:name "borkdude.tdn.pod"
+                 :vars [{:name '-reg-transit-handlers
+                         :code (reg-transit-handlers)} ]}
+                {:name 'clojure.tools.deps.alpha
                  :vars (public-var-maps 'clojure.tools.deps.alpha)}
                 {:name 'clojure.tools.deps.alpha.util.dir
                  :vars (conj
@@ -127,7 +186,7 @@
   `(let [id# ~id]
      (try
        (write-bencode
-        {"value"  (pr-str ~@body)
+        {"value"  (write-payload ~@body)
          "id"     id#
          "status" ["done"]})
        (catch Exception e#
@@ -152,6 +211,7 @@
       (debug :msg msg)
       (let [op (some-> (get msg "op") read-keyword)
             id (or (some-> (get msg "id") read-string) "unknown")]
+        (debug :op op :id id)
         (case op
           :describe (write-map description)
           :invoke   (with-message [id]
