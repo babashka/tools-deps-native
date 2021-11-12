@@ -9,10 +9,62 @@
    "clojars" {:url "https://repo.clojars.org/"}})
 
 (defn usage []
-  (println "tools.deps.edn [ (deps [path])]"))
+  (println
+   (str "tools.deps.edn ["
+        "help | "
+        "deps | "
+        "create-basis | "
+        "root-deps | "
+        "slurp-deps | "
+        "user-deps-path"
+        "] ")))
 
-(defn help [args]
-  (println "tools.deps.edn [ (deps [path])]"))
+(defn help [[_ f]]
+  (println)
+  (if f
+    (case f
+      "help" (println "help [cmd]\n\nShow help.")
+      "deps" (println "deps [path|deps-edn-map]
+
+Load the given path to a deps.edn file, defaults to ./deps.edn.
+Output a classpath EDN map with :classpath-roots and :classpath keys.")
+      "create-basis" (println "create-basis [path]
+
+Output a basis from a set of deps sources and a set of aliases. By default,
+use root, user, and project deps and no argmaps (essentially the same classpath
+you get by default from the Clojure CLI).
+
+Each dep source value can be :standard, a string path, a deps edn map, or nil.
+Sources are merged in the order - :root, :user, :project, :extra.
+
+Aliases refer to argmaps in the merged deps that will be supplied to the basis
+subprocesses (tool, resolve-deps, make-classpath-map).")
+      "root-deps" (println "root-deps
+
+Read and output the root deps.edn resource from the classpath at the path
+clojure/tools/deps/deps.edn")
+      "slurp-deps" (println "slurp-deps [path]
+
+Read a single deps.edn file from disk and canonicalize symbols.
+Outputs a deps map. If the file doesn't exist, returns nil.
+
+Defaults to ./deps.edn")
+      "user-deps-path" (println "user-deps-path
+
+Use the same logic as clj to output the location of the user deps.edn.
+Note that it's possible no file may exist at this location."))
+
+    (println "tools.deps.edn ...
+
+          help  show this help message
+          deps  output a claspath map from a deps map
+  create-basis  output a basis from a set of deps sources and a set of aliases
+     root-deps  output the root deps.edn
+    slurp-deps  read, canonicalize and output a deps.edn file
+user-deps-path  output the path to the users deps.edn file
+
+Use tools-deps.edn help <cmd> to get more specific help"))
+  (println))
 
 (defn slurp-deps
   ([path]
@@ -35,9 +87,15 @@
 
 (defn deps [args]
   (let [arg  (first args)
-        deps (or
-              (slurp-deps arg)
-              (edn/read-string arg))]
+        deps (cond
+               (and arg (.exists (io/file arg)))
+               (slurp-deps arg)
+
+               arg
+               (edn/read-string arg)
+
+               :else
+               (slurp-deps))]
     (if (map? deps)
       (prn (as-> deps x
              (update x :mvn/repos (fn [repos]
