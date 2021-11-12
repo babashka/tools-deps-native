@@ -8,7 +8,8 @@
    [clojure.walk :as walk]
    [cognitect.transit :as transit])
   (:import
-   [java.io PushbackInputStream]))
+   [java.io PushbackInputStream]
+   #_[org.apache.maven.project ReactorModelPool]))
 
 (set! *warn-on-reflection* true)
 
@@ -56,12 +57,10 @@
 (def jiofile-write-handler
   (transit/write-handler jiofile-key str))
 
-(def client-pod-namespace 'babashka.pods)
-
 (defn reg-transit-handlers
   []
   (format "
-(require '[%s :as --pod])
+(require '[babashka.pods :as --pod])
 
 (--pod/add-transit-read-handler!
     \"%s\"
@@ -72,7 +71,7 @@
   \"%s\"
   str)
 "
-          client-pod-namespace jiofile-key jiofile-key))
+          jiofile-key jiofile-key))
 
 (def transit-read-handlers
   (delay
@@ -134,7 +133,7 @@
 
 (def with-dir-form-str
   (str
-   "(defmacro with-dir [^File dir & body] "
+   "(defmacro with-dir [^java.io.File dir & body] "
    " `(binding [clojure.tools.deps.alpha.util.dir/*the-dir* ~dir] ~@body))"))
 
 (defn client-invoke-with-dir-form
