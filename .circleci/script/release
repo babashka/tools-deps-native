@@ -4,7 +4,7 @@ rm -rf /tmp/release
 mkdir -p /tmp/release
 cp tools-deps-native /tmp/release
 # VERSION=$(cat resources/POD_BABASHKA_BUDDY_VERSION)
-VERSION=0.0.1-SNAPSHOT
+VERSION=0.0.1
 
 cd /tmp/release
 
