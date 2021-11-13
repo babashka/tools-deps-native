@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -eou pipefail
+set -v
 
 app_name=tools-deps-native
 app_ns=borkdude.tdn.main
