@@ -7,6 +7,11 @@ This is an [experiment](#issues) to compile tools.deps with GraalVM native-image
 - [x] resolve git deps
 - [x] download git deps
 
+## Status
+
+This project is currently _very experimental_ and any functionality or API may
+still change.
+
 ## Why
 
 Not needing a JVM for dependency resolution and downloading can speed up things
@@ -29,21 +34,7 @@ To build from source yourself: see [build](#build).
 
 ## Run
 
-As of now the binary accepts a `deps.edn` literal map or file and returns the classpath as a string.
-
-``` shell
-$ ./tools-deps-native '{:deps {babashka/fs {:mvn/version "0.0.1"}}}'
-Downloading: babashka/fs/0.0.1/fs-0.0.1.pom from clojars
-Downloading: babashka/fs/0.0.1/fs-0.0.1.jar from clojars
-"/Users/borkdude/.m2/repository/babashka/fs/0.0.1/fs-0.0.1.jar:/Users/borkdude/.m2/repository/org/clojure/clojure/1.9.0/clojure-1.9.0.jar:/Users/borkdude/.m2/repository/org/clojure/core.specs.alpha/0.1.24/core.specs.alpha-0.1.24.jar:/Users/borkdude/.m2/repository/org/clojure/spec.alpha/0.1.143/spec.alpha-0.1.143.jar"
-```
-
-``` shell
-$ ./tools-deps-native '{:deps {babashka/fs {:git/url "https://github.com/babashka/fs.git" :sha "bc4bd8efe29e9000c941877b02584555f0874988"}}}'
-Cloning: https://github.com/babashka/fs.git
-Checking out: https://github.com/babashka/fs.git at bc4bd8efe29e9000c941877b02584555f0874988
-"/Users/borkdude/.gitlibs/libs/babashka/fs/bc4bd8efe29e9000c941877b02584555f0874988/src:/Users/borkdude/.m2/repository/org/clojure/clojure/1.10.1/clojure-1.10.1.jar:/Users/borkdude/.m2/repository/org/clojure/core.specs.alpha/0.2.44/core.specs.alpha-0.2.44.jar:/Users/borkdude/.m2/repository/org/clojure/spec.alpha/0.2.176/spec.alpha-0.2.176.jar"
-```
+Run the CLI to get information about usage.
 
 ## Build
 
