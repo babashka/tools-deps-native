@@ -39,11 +39,11 @@ jobs:
   linux:
     resource_class: large
     docker:
-      - image: circleci/clojure:lein-2.9.3-buster
+      - image: circleci/clojure:openjdk-11-lein-2.9.6-bullseye
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-ce-java11-21.0.0
+      GRAALVM_HOME: /home/circleci/graalvm-ce-java11-21.3.0
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
     steps:
@@ -70,9 +70,9 @@ jobs:
           name: Download GraalVM
           command: |
             cd ~
-            if ! [ -d graalvm-ce-java11-21.0.0 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.0.0/graalvm-ce-java11-linux-amd64-21.0.0.tar.gz
-              tar xzf graalvm-ce-java11-linux-amd64-21.0.0.tar.gz
+            if ! [ -d graalvm-ce-java11-21.3.0 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/graalvm-ce-java11-linux-amd64-21.3.0.tar.gz
+              tar xzf graalvm-ce-java11-linux-amd64-21.3.0.tar.gz
             fi
       - run:
           name: Install bb
@@ -99,7 +99,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-21.0.0
+            - ~/graalvm-ce-java11-21.3.0
           key: linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
@@ -109,7 +109,7 @@ jobs:
       xcode: "12.0.0"
     resource_class: large
     environment:
-      GRAALVM_HOME: /Users/distiller/graalvm-ce-java11-21.0.0/Contents/Home
+      GRAALVM_HOME: /Users/distiller/graalvm-ce-java11-21.3.0/Contents/Home
       APP_PLATFORM: macos # used in release script
       APP_TEST_ENV: native
     steps:
@@ -135,9 +135,9 @@ jobs:
           command: |
             cd ~
             ls -la
-            if ! [ -d graalvm-ce-java11-21.0.0 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.0.0/graalvm-ce-java11-darwin-amd64-21.0.0.tar.gz
-              tar xzf graalvm-ce-java11-darwin-amd64-21.0.0.tar.gz
+            if ! [ -d graalvm-ce-java11-21.3.0 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/graalvm-ce-java11-darwin-amd64-21.3.0.tar.gz
+              tar xzf graalvm-ce-java11-darwin-amd64-21.3.0.tar.gz
             fi
       - run:
           name: Install bb
@@ -164,14 +164,14 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-21.0.0
+            - ~/graalvm-ce-java11-21.3.0
           key: mac-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
           destination: release
   deploy:
     docker:
-      - image: circleci/clojure:lein-2.9.3-buster
+      - image: circleci/clojure:openjdk-11-lein-2.9.6-bullseye
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
