@@ -4,3 +4,6 @@ classes
 /*json
 !/resources.json
 /tools-deps-native.build_artifacts.txt
+.lsp/.cache
+.clj-kondo/.cache
+/target
