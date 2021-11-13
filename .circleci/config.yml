@@ -4,38 +4,6 @@
 #
 version: 2.1
 jobs:
-  # jvm:
-  #   docker:
-  #     # specify the version you desire here
-  #     - image: circleci/clojure:lein-2.9.3-buster
-  #   working_directory: ~/repo
-  #   environment:
-  #     LEIN_ROOT: "true"
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Get rid of erroneous git config
-  #         command: |
-  #             rm -rf /home/circleci/.gitconfig
-  #     - restore_cache:
-  #         keys:
-  #           - v1-dependencies-{{ checksum "deps.edn" }}
-  #           # fallback to using the latest cache if no exact match is found
-  #           - v1-dependencies-
-  #     - run:
-  #         name: Install Clojure
-  #         command: |
-  #           wget -nc https://download.clojure.org/install/linux-install-1.10.1.727.sh
-  #           chmod +x linux-install-1.10.1.727.sh
-  #           sudo ./linux-install-1.10.1.727.sh
-  #     - run:
-  #         name: Run JVM tests
-  #         command: |
-  #           script/test
-  #     - save_cache:
-  #         paths:
-  #           - ~/.m2
-  #         key: v1-dependencies-{{ checksum "deps.edn" }}
   linux:
     resource_class: large
     docker:
@@ -58,9 +26,9 @@ jobs:
       - run:
           name: Install Clojure
           command: |
-            wget https://download.clojure.org/install/linux-install-1.10.1.727.sh
-            chmod +x linux-install-1.10.1.727.sh
-            sudo ./linux-install-1.10.1.727.sh
+            wget https://download.clojure.org/install/linux-install-1.10.3.1029.sh
+            chmod +x linux-install-1.10.3.1029.sh
+            sudo ./linux-install-1.10.3.1029.sh
       - run:
           name: Install native dev tools
           command: |
