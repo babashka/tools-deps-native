@@ -1,7 +1,7 @@
 (ns borkdude.tdn.cli
   (:require
-   [clojure.java.io :as io]
    [clojure.edn :as edn]
+   [clojure.java.io :as io]
    [clojure.tools.deps.alpha :as deps]))
 
 (def default-repos
@@ -10,7 +10,7 @@
 
 (defn usage []
   (println
-   (str "tools.deps.edn ["
+   (str "tools-deps-native ["
         "help | "
         "deps | "
         "create-basis | "
@@ -104,14 +104,14 @@ Use tools-deps.edn help <cmd> to get more specific help"))
              (deps/make-classpath-map deps x nil)))
       (binding [*out* *err*]
         (throw
-         (ex-info (str"Invalid argument " deps ", expeccted a map") {}))))))
+         (ex-info (str"Invalid argument " deps ", expected a map") {}))))))
 
 (defn cli [args]
   (if-let [arg (some-> args first keyword)]
     (try
       (case arg
         :deps           (deps (rest args))
-        :create-basis   (println (create-basis (rest args)))
+        :create-basis   (create-basis (rest args))
         :root-deps      (println (deps/root-deps))
         :slurp-deps     (println (apply slurp-deps (rest args)))
         :user-deps-path (println (deps/user-deps-path))
