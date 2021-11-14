@@ -5,11 +5,11 @@
    [borkdude.tdn.bbuild]
    [clojure.tools.deps.alpha]
    [clojure.tools.deps.alpha.util.dir]
+   [clojure.tools.deps.alpha.util.maven]
    [clojure.walk :as walk]
    [cognitect.transit :as transit])
   (:import
-   [java.io PushbackInputStream]
-   #_[org.apache.maven.project ReactorModelPool]))
+   [java.io PushbackInputStream]))
 
 (set! *warn-on-reflection* true)
 
@@ -152,24 +152,17 @@
 
 (defn dispatch* [sym args]
   (let [args-sym (gensym "args")
-        invoke-direct-var-syms
-        (ns-public-fq-syms 'borkdude.tdn.bbuild)
         invoke-with-dir-var-syms
         (reduce
          into []
-         [(ns-public-fq-syms 'clojure.tools.deps.alpha)
+         [(ns-public-fq-syms 'borkdude.tdn.bbuild)
+          (ns-public-fq-syms 'clojure.tools.deps.alpha)
           (ns-public-fq-syms 'clojure.tools.deps.alpha.util.dir)
           (ns-public-fq-syms 'clojure.tools.deps.alpha.util.io)
           (ns-public-fq-syms 'clojure.tools.deps.alpha.util.maven)])]
     `(let [~args-sym ~args
            sym#      ~sym]
        (case sym#
-         ~@(reduce
-            (fn [forms s]
-              (into forms
-                    [s `(apply ~s ~args-sym)]))
-            []
-            invoke-direct-var-syms)
          ~@(reduce
             (fn [forms s]
               (into forms
@@ -252,7 +245,7 @@
                  :vars (public-wrapped-var-maps
                         'clojure.tools.deps.alpha.util.maven)}
                 {:name 'borkdude.tdn.bbuild
-                 :vars (public-var-maps 'borkdude.tdn.bbuild)}]
+                 :vars (public-wrapped-var-maps 'borkdude.tdn.bbuild)}]
    :opts       {:shutdown {}}})
 
 (defn error-map
@@ -265,12 +258,14 @@
 (defmacro with-message [[id] & body]
   `(let [id# ~id]
      (try
-       (write-bencode
-        {"value"  (write-payload ~@body)
-         "id"     id#
-         "status" ["done"]})
+       (let [val# (do ~@body)
+             transit# (write-transit val#)]
+         (debug :transit transit#)
+         (write-bencode
+          {"value"  transit#
+           "id"     id#
+           "status" ["done"]}))
        (catch Exception e#
-         (debug (str e#))
          (write-bencode
           (error-map
            (ex-message e#)
