@@ -1,0 +1,8 @@
+[{"name":"org.apache.maven.model.Build",
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"getOutputDirectory","parameterTypes":[] },
+    {"name":"getSourceDirectory","parameterTypes":[] },
+    {"name":"getTestOutputDirectory","parameterTypes":[] },
+    {"name":"getTestSourceDirectory","parameterTypes":[] }
+  ]}]

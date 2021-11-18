@@ -2,8 +2,11 @@
   (:require
    [borkdude.tdn.cli :as cli]
    [borkdude.tdn.pod :as pod]
+   [clojure.java.io :as io]
    [clojure.string :as str]
-   [clojure.tools.deps.alpha])
+   [clojure.tools.deps.alpha]
+   [clojure.tools.deps.alpha.util.dir :as dir]
+   [clojure.tools.deps.alpha.util.maven :as mvn])
   (:gen-class))
 
 (defmacro reference-publics []
@@ -16,29 +19,31 @@
 
 (reference-publics)
 
-#_(require '[clojure.tools.deps.alpha.extensions :as ext]) ;; somehow requiring this namespace as a side effect helps...
-(require '[clojure.edn :as edn]
-         '[clojure.tools.deps.alpha.util.maven :as mvn])
+;; Stop the build directory from being baked into the binary.
+;; This gets initialised in -main.
+(alter-var-root #'dir/*the-dir* (constantly nil))
 
-;; avoid null pointer
-#_(mvn/make-system)
-
+(defn initialise-dir []
+  (alter-var-root
+   #'dir/*the-dir*
+   (constantly (io/file (System/getProperty "user.dir"))))
+  (pod/debug :user.dir (System/getProperty "user.dir")))
 
 (defn -main [& args]
-  ;; TODO use BABASHKA_POD to detect when running as POD or CLI
   (mvn/make-system)
+  (initialise-dir)
+
   (if (System/getenv "BABASHKA_POD")
     (pod/pod args)
     (cli/cli args)))
 
 (defn init-at-build-time [_]
-  (mvn/make-system)
   (println
    (->> (map ns-name (all-ns))
-        (remove #(clojure.string/starts-with? % "clojure"))
-        (map #(clojure.string/split (str %) #"\."))
+        (remove #(str/starts-with? % "clojure"))
+        (map #(str/split (str %) #"\."))
         (keep butlast)
-        (map #(clojure.string/join "." %))
+        (map #(str/join "." %))
         distinct
         (map munge)
         (cons "clojure")
