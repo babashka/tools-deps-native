@@ -148,6 +148,7 @@
   (assert (symbol? args-sym) (str args-sym)) ; no need to let bind
   `(binding [clojure.tools.deps.alpha.util.dir/*the-dir*
              (clojure.tools.deps.alpha.util.dir/canonicalize (first ~args-sym))]
+     (debug :dir (clojure.tools.deps.alpha.util.dir/canonicalize (first ~args-sym)))
      (apply ~s (second ~args-sym))))
 
 (defn dispatch* [sym args]
