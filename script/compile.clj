@@ -29,7 +29,7 @@
 (def classpath (str (str/trim (with-out-str (clojure {:extra-env extra-env} "-Spath")))
                     fs/path-separator "classes"))
 
-(shell "script/gen-reflect-config.clj" classpath)
+(shell "bb script/gen-reflect-config.clj" classpath)
 
 (println "Compiling")
 
