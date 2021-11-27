@@ -10,6 +10,8 @@
 (def app_name "tools-deps-native")
 (def app_ns "borkdude.tdn.main")
 
+(run! prn (map str (fs/list-dir native-image-dir)))
+(prn (native-bin "gu"))
 (shell (format "%s install native-image"
                (native-bin "gu")))
 
