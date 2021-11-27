@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Build binary
           command: |
-            script/compile
+            bb script/compile.clj
           no_output_timeout: 30m
       # - run:
       #     name: Run tests
@@ -115,7 +115,7 @@ jobs:
       - run:
           name: Build binary
           command: |
-            script/compile
+            bb script/compile.clj
           no_output_timeout: 30m
       # - run:
       #     name: Run tests
