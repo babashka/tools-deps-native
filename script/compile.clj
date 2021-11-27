@@ -40,7 +40,7 @@
 (def args ["-cp" classpath
            (str "-H:Name=" app_name)
            "-H:+ReportExceptionStackTraces"
-           "-H:ReflectionConfigurationFiles=reflect-config.json"
+           "-H:ReflectionConfigurationFiles=reflect-config.json,reflect-config-manual.json"
            "-H:ResourceConfigurationFiles=resources.json"
            "-H:+JNI"
            "-H:Log=registerResource:"
