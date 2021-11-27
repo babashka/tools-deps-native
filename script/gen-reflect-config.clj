@@ -16,7 +16,7 @@
              args)
         trace-agent (str trace-agent "=trace-output=trace-file.json")]
     (apply shell {:extra-env (assoc extra-env
-                              "JAVA_TOOL_OPTIONS" trace-agent)}
+                                    "JAVA_TOOL_OPTIONS" trace-agent)}
            "bb clojure" cmd)))
 
 (defn trace->config [config-dir]

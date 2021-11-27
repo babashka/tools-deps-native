@@ -9,6 +9,7 @@ clone_folder: C:\projects\babashka
 environment:
   GRAALVM_HOME: C:\projects\babashka\graalvm\graalvm-ce-java11-21.3.0
   BABASHKA_XMX: "-J-Xmx5g"
+  JAVA_HOME: C:\projects\babashka\graalvm\graalvm-ce-java11-21.3.0
 
 cache:
   - '%USERPROFILE%\.m2 -> deps.edn'

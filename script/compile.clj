@@ -3,9 +3,10 @@
 (require '[babashka.fs :as fs]
          '[babashka.tasks :refer [shell clojure]]
          '[clojure.string :as str]
-         '[graalvm :refer [native-image-dir
-                           native-bin
+         '[graalvm :refer [native-bin
                            extra-env]])
+
+(shell "java" "-version")
 
 (def app_name "tools-deps-native")
 (def app_ns "borkdude.tdn.main")
@@ -19,7 +20,7 @@
 (clojure {:extra-env extra-env}
          "-M:compile-main")
 
-(def init-at-build-time 
+(def init-at-build-time
   (str/trim (:out (clojure {:extra-env extra-env
                             :out :string}
                            "-X borkdude.tdn.main/init-at-build-time"))))
