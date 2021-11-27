@@ -12,8 +12,7 @@
 
 (run! prn (map str (fs/list-dir native-image-dir)))
 (prn (native-bin "gu"))
-(shell (format "%s install native-image"
-               (native-bin "gu")))
+(shell (str (native-bin "gu") " install native-image"))
 
 (fs/delete-tree "classes")
 (fs/delete-tree "tools-deps-native")
