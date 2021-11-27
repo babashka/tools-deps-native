@@ -7,3 +7,5 @@ classes
 .lsp/.cache
 .clj-kondo/.cache
 /target
+!/reflect-config-cleaned.json
+native-image-args.txt

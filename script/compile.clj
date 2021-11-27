@@ -4,7 +4,8 @@
          '[babashka.tasks :refer [shell clojure]]
          '[clojure.string :as str]
          '[graalvm :refer [native-bin
-                           extra-env]])
+                           extra-env
+                           windows?]])
 
 (def app_name "tools-deps-native")
 (def app_ns "borkdude.tdn.main")
@@ -29,7 +30,8 @@
 (def classpath (str (str/trim (with-out-str (clojure {:extra-env extra-env} "-Spath")))
                     fs/path-separator "classes"))
 
-(shell "bb script/gen-reflect-config.clj" classpath)
+;; uncomment to gen reflect config
+#_(shell "bb script/gen-reflect-config.clj" classpath)
 
 (println "Compiling")
 
@@ -38,7 +40,7 @@
 (def args ["-cp" classpath
            "-J-Xmx5g" (str "-H:Name=" app_name)
            "-H:+ReportExceptionStackTraces"
-           "-H:ReflectionConfigurationFiles=reflect-config.json,reflect-config-manual.json"
+           "-H:ReflectionConfigurationFiles=reflect-config-cleaned.json,reflect-config-manual.json"
            "-H:ResourceConfigurationFiles=resources.json"
            "-H:+JNI"
            "-H:Log=registerResource:"
