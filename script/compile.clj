@@ -10,9 +10,7 @@
 (def app_name "tools-deps-native")
 (def app_ns "borkdude.tdn.main")
 
-(run! prn (map str (fs/list-dir native-image-dir)))
-(prn (native-bin "gu"))
-(shell (str (native-bin "gu") " install native-image"))
+(shell (native-bin "gu") "install" "native-image")
 
 (fs/delete-tree "classes")
 (fs/delete-tree "tools-deps-native")
