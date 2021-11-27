@@ -6,8 +6,6 @@
          '[graalvm :refer [native-bin
                            extra-env]])
 
-(shell {:extra-env extra-env} "java" "-version")
-
 (def app_name "tools-deps-native")
 (def app_ns "borkdude.tdn.main")
 
