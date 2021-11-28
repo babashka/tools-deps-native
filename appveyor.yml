@@ -54,8 +54,17 @@ build_script:
     call bb script/compile.clj
 
 - cmd: >-
+    echo Creating zip archive
+
+    set /P VERSION=< resources\META-INF\borkdude\tools-deps-native\version.txt
+
+    set zip=tools-deps-native-%VERSION%-windows-amd64.zip
+
+    jar -cMf %zip% tools-deps-native.exe
+
+- cmd: >-
      call bb script/test.clj
 
 artifacts:
-- path: tools-deps-native.exe
-  name: tools-deps-native.exe
+- path: tools-deps-native-*-windows-amd64.zip
+  name: tools-deps-native
