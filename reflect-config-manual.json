@@ -4,5 +4,9 @@
     {"name":"getOutputDirectory","parameterTypes":[] },
     {"name":"getSourceDirectory","parameterTypes":[] },
     {"name":"getTestOutputDirectory","parameterTypes":[] },
-    {"name":"getTestSourceDirectory","parameterTypes":[] }
+    {"name":"getTestSourceDirectory","parameterTypes":[] },
+    {
+      "name" : "getPackaging",
+      "parameterTypes" : [ ]
+    }
   ]}]

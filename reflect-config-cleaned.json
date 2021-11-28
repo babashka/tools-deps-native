@@ -98,6 +98,9 @@
     "name" : "getOrganization",
     "parameterTypes" : [ ]
   }, {
+    "name" : "getPackaging",
+    "parameterTypes" : [ ]
+  }, {
     "name" : "getPrerequisites",
     "parameterTypes" : [ ]
   }, {

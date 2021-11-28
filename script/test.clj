@@ -9,13 +9,15 @@
   (do (shell "git clone https://github.com/babashka/tools.bbuild")
       (shell {:dir "tools.bbuild"} "git checkout babashka")))
 
-(def native-executable 
-  (if windows? 
+(def native-executable
+  (if windows?
     "tools-deps-native.exe"
-    "tools-deps-native"))
+    "./tools-deps-native"))
 
 (fs/copy native-executable "tools.bbuild" {:replace-existing true})
 
 (shell {:dir "tools.bbuild"} "bb test")
+
+(shell native-executable "create-basis" '{:extra {:deps {buddy/buddy-core {:mvn/version "1.10.1"}}}})
 
 nil

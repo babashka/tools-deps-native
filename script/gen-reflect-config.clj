@@ -31,7 +31,8 @@
 (trace ["deps" "{}"])
 (trace ["create-basis"
         ;; NOTE adding an s3 dep here would enable s3 support?
-        "{:deps {org.clojure/clojure {:mvn/version \"1.10.3\"}}}"])
+        ;; adding buddy-core 1.10.1 triggers reflection on
+        "{:extra {:deps {buddy/buddy-core {:mvn/version \"1.10.1\"}}}}"])
 
 (trace->config ".")
 
@@ -88,7 +89,8 @@
                 (str/starts-with? name "clojure.core")
                 (str/starts-with? name "clojure.lang")
                 (str/starts-with? name "cognitect.")
-                (str/starts-with? name "bencode."))
+                (str/starts-with? name "bencode.")
+                (str/starts-with? name "clojure.tools.analyzer"))
     ;; fix bug(?) in automated generated config
     (if (= "java.lang.reflect.Method" name)
       (assoc m :name "java.lang.reflect.AccessibleObject")
