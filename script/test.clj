@@ -7,7 +7,7 @@
   (do (shell {:dir "tools.bbuild"} "git checkout babashka")
       (shell {:dir "tools.bbuild"} "git pull"))
   (do (shell "git clone https://github.com/babashka/tools.bbuild")
-      (shell "git checkout babashka")))
+      (shell {:dir "tools.bbuild"} "git checkout babashka")))
 
 (def native-executable 
   (if windows? 
