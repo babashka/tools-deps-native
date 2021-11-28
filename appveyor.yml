@@ -16,6 +16,9 @@ cache:
   - '%USERPROFILE%\.gitlibs -> deps.edn'
   - 'graalvm -> appveyor.yml'
 
+install:
+ - set PATH=%GRAALVM_HOME%\bin;%PATH%
+
 clone_script:
 - ps: >-
     if(-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
@@ -32,9 +35,6 @@ clone_script:
 
 build_script:
 - cmd: >-
-    set PATH=%GRAALVM_HOME%\bin;%PATH%
-
-    where java
 
 # set CLJ_KONDO_TEST_ENV=jvm
 
@@ -54,6 +54,8 @@ build_script:
     powershell -Command "if (Test-Path('bb.exe')) { return } else { Expand-Archive bb.zip . }"
 
 - cmd: >-
+    where java
+
     call bb script/compile.clj
 
 - cmd: >-
@@ -66,7 +68,9 @@ build_script:
     jar -cMf %zip% tools-deps-native.exe
 
 - cmd: >-
-     call bb script/test.clj
+    where java
+
+    call bb script/test.clj
 
 artifacts:
 - path: tools-deps-native-*-windows-amd64.zip
