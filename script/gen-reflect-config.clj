@@ -10,33 +10,30 @@
          '[graalvm :refer [extra-env
                            native-bin]])
 
-;; (def trace-agent "-agentlib:native-image-agent")
+(def trace-agent "-agentlib:native-image-agent")
 
-;; (defn trace [args]
-;;   (let [cmd (into
-;;              ["-Scp" (first *command-line-args*) "-M:compile"]
-;;              args)
-;;         trace-agent (str trace-agent "=trace-output=trace-file.json")]
-;;     (apply shell {:extra-env (assoc extra-env
-;;                                     "JAVA_TOOL_OPTIONS" trace-agent)}
-;;            "bb clojure" cmd)))
+(defn trace [args]
+  (let [cmd (into ["-M:compile"] args)
+        trace-agent (str trace-agent "=trace-output=trace-file.json")]
+    (apply shell {:extra-env (assoc extra-env
+                                    "JAVA_TOOL_OPTIONS" trace-agent)}
+           "bb clojure" cmd)))
 
-;; (defn trace->config [config-dir]
-;;   (-> (shell
-;;        (native-bin "native-image-configure")
-;;        "generate"
-;;        "--trace-input=trace-file.json"
-;;        (str "--output-dir=" config-dir)
-;;        )))
+(defn trace->config [config-dir]
+  (-> (shell
+       (native-bin "native-image-configure")
+       "generate"
+       "--trace-input=trace-file.json"
+       (str "--output-dir=" config-dir))))
 
-;; (println "Tracing")
+(println "Tracing")
 
-;; (trace ["deps" "{}"])
-;; (trace ["create-basis"
-;;         ;; NOTE adding an s3 dep here would enable s3 support?
-;;         "{:deps {org.clojure/clojure {:mvn/version \"1.10.3\"}}}"])
+(trace ["deps" "{}"])
+(trace ["create-basis"
+        ;; NOTE adding an s3 dep here would enable s3 support?
+        "{:deps {org.clojure/clojure {:mvn/version \"1.10.3\"}}}"])
 
-;; (trace->config ".")
+(trace->config ".")
 
 (def trace-json (cheshire/parse-string (slurp "trace-file.json") true))
 
@@ -87,7 +84,11 @@
   (when-not (or (and (= 1 (count m))
                      (contains? @ignored name)
                      (not (contains? @unignored name)))
-                (str/includes? name "$eval"))
+                (str/includes? name "$eval")
+                (str/starts-with? name "clojure.core")
+                (str/starts-with? name "clojure.lang")
+                (str/starts-with? name "cognitect.")
+                (str/starts-with? name "bencode."))
     ;; fix bug(?) in automated generated config
     (if (= "java.lang.reflect.Method" name)
       (assoc m :name "java.lang.reflect.AccessibleObject")

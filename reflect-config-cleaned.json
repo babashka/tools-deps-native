@@ -19,46 +19,6 @@
 }, {
   "name" : "[Z"
 }, {
-  "name" : "clojure.core.async.impl.protocols.Buffer",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.core.async.impl.protocols.Channel",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.core.async.impl.protocols.Handler",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.core.async.impl.protocols.ReadPort",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.core.async.impl.protocols.WritePort",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.lang.AFunction",
-  "allPublicFields" : true,
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.lang.Compiler",
-  "allPublicFields" : true
-}, {
-  "name" : "clojure.lang.LockingTransaction",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.lang.MethodImplCache",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.lang.Namespace",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.lang.Symbol",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.lang.Util",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "clojure.lang.Var",
-  "queryAllPublicMethods" : true
-}, {
   "name" : "clojure.tools.deps.alpha.util.S3TransporterFactory",
   "methods" : [ {
     "name" : "<init>",

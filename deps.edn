@@ -11,8 +11,8 @@
             :jvm-opts  ["-Dclojure.compiler.direct-linking=true"]}
 
            :compile {:main-opts  ["-m" "borkdude.tdn.main"]
-                     :extra-deps {babashka/fs {:mvn/version "0.0.1"}}}
-
+                     :extra-deps {babashka/fs {:mvn/version "0.0.1"}}
+                     :extra-paths ["classes"]}
            :test
            {:extra-paths ["test"]
             :extra-deps
