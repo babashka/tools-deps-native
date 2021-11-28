@@ -14,7 +14,8 @@ jobs:
       GRAALVM_HOME: /home/circleci/graalvm-ce-java11-21.3.0
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
-      GRAALVM_MUSL: "true"
+      BABASHKA_STATIC: true
+      BABASHKA_MUSL: true
     steps:
       - checkout
       - run:

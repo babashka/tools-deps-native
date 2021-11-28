@@ -55,7 +55,7 @@
            "--no-fallback"
            "--no-server"
            "--allow-incomplete-classpath"]
-    (= "true" (System/getenv "GRAALVM_MUSL"))
+    (= "true" (System/getenv "BABASHKA_MUSL"))
     (conj "--static"
           "--libc=musl"
           ;; see https://github.com/oracle/graal/issues/3398
