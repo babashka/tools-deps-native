@@ -14,6 +14,7 @@ jobs:
       GRAALVM_HOME: /home/circleci/graalvm-ce-java11-21.3.0
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
+      GRAALVM_MUSL: "true"
     steps:
       - checkout
       - run:
@@ -34,6 +35,7 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get -y install gcc g++ zlib1g-dev
+            sudo -E script/setup-musl
       - run:
           name: Download GraalVM
           command: |

@@ -37,7 +37,8 @@
 
 (prn app_ns)
 
-(def args ["-cp" classpath
+(def args
+  (cond-> ["-cp" classpath
            "-J-Xmx5g" (str "-H:Name=" app_name)
            "-H:+ReportExceptionStackTraces"
            "-H:ReflectionConfigurationFiles=reflect-config-cleaned.json,reflect-config-manual.json"
@@ -53,7 +54,12 @@
            "--verbose"
            "--no-fallback"
            "--no-server"
-           "--allow-incomplete-classpath"])
+           "--allow-incomplete-classpath"]
+    (= "true" (System/getenv "GRAALVM_MUSL"))
+    (conj "--static"
+          "--libc=musl"
+          ;; see https://github.com/oracle/graal/issues/3398
+          "-H:CCompilerOption=-Wl,-z,stack-size=2097152")))
 
 (spit "native-image-args.txt" (str/join " " args))
 
