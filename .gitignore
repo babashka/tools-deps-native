@@ -1,4 +1,5 @@
 tools-deps-native
+tools-deps-native.exe
 .cpcache
 classes
 /*json
@@ -7,3 +8,6 @@ classes
 .lsp/.cache
 .clj-kondo/.cache
 /target
+!/reflect-config-cleaned.json
+native-image-args.txt
+/tools.bbuild

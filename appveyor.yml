@@ -2,18 +2,22 @@
 
 version: "v-{build}"
 
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 clone_folder: C:\projects\babashka
 
 environment:
   GRAALVM_HOME: C:\projects\babashka\graalvm\graalvm-ce-java11-21.3.0
   BABASHKA_XMX: "-J-Xmx5g"
+  JAVA_HOME: C:\projects\babashka\graalvm\graalvm-ce-java11-21.3.0
 
 cache:
   - '%USERPROFILE%\.m2 -> deps.edn'
   - '%USERPROFILE%\.gitlibs -> deps.edn'
   - 'graalvm -> appveyor.yml'
+
+install:
+ - set PATH=%GRAALVM_HOME%\bin;%PATH%
 
 clone_script:
 - ps: >-
@@ -39,7 +43,7 @@ build_script:
 # see https://github.com/quarkusio/quarkus/pull/7663
 
 - cmd: >-
-    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+    call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 
     powershell -Command "if (Test-Path('graalvm')) { return } else { (New-Object Net.WebClient).DownloadFile('https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/graalvm-ce-java11-windows-amd64-21.3.0.zip', 'graalvm.zip') }"
 
@@ -50,8 +54,24 @@ build_script:
     powershell -Command "if (Test-Path('bb.exe')) { return } else { Expand-Archive bb.zip . }"
 
 - cmd: >-
+    where java
+
     call bb script/compile.clj
 
+- cmd: >-
+    echo Creating zip archive
+
+    set /P VERSION=< resources\META-INF\borkdude\tools-deps-native\version.txt
+
+    set zip=tools-deps-native-%VERSION%-windows-amd64.zip
+
+    jar -cMf %zip% tools-deps-native.exe
+
+- cmd: >-
+    where java
+
+    call bb script/test.clj
+
 artifacts:
-- path: tools-deps-native.exe
-  name: tools-deps-native.exe
+- path: tools-deps-native-*-windows-amd64.zip
+  name: tools-deps-native

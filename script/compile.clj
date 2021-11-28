@@ -3,16 +3,14 @@
 (require '[babashka.fs :as fs]
          '[babashka.tasks :refer [shell clojure]]
          '[clojure.string :as str]
-         '[graalvm :refer [native-image-dir
-                           native-bin
-                           extra-env]])
+         '[graalvm :refer [native-bin
+                           extra-env
+                           windows?]])
 
 (def app_name "tools-deps-native")
 (def app_ns "borkdude.tdn.main")
 
-(shell {:dir native-image-dir}
-       (format "%s install native-image"
-               (native-bin "gu")))
+(shell (native-bin "gu") "install" "native-image")
 
 (fs/delete-tree "classes")
 (fs/delete-tree "tools-deps-native")
@@ -21,9 +19,10 @@
 (clojure {:extra-env extra-env}
          "-M:compile-main")
 
-(def init-at-build-time (:out (clojure {:extra-env extra-env
-                                        :out :string}
-                                       "-X borkdude.tdn.main/init-at-build-time")))
+(def init-at-build-time
+  (str/trim (:out (clojure {:extra-env extra-env
+                            :out :string}
+                           "-X borkdude.tdn.main/init-at-build-time"))))
 
 (println "Init at build time:")
 (println init-at-build-time)
@@ -31,16 +30,17 @@
 (def classpath (str (str/trim (with-out-str (clojure {:extra-env extra-env} "-Spath")))
                     fs/path-separator "classes"))
 
-(shell "script/gen-reflect-config.clj" classpath)
+;; uncomment to gen reflect config
+#_(shell "bb script/gen-reflect-config.clj" classpath)
 
 (println "Compiling")
 
-(prn classpath)
+(prn app_ns)
 
 (def args ["-cp" classpath
-           (str "-H:Name=" app_name)
+           "-J-Xmx5g" (str "-H:Name=" app_name)
            "-H:+ReportExceptionStackTraces"
-           "-H:ReflectionConfigurationFiles=reflect-config.json,reflect-config-manual.json"
+           "-H:ReflectionConfigurationFiles=reflect-config-cleaned.json,reflect-config-manual.json"
            "-H:ResourceConfigurationFiles=resources.json"
            "-H:+JNI"
            "-H:Log=registerResource:"
@@ -53,13 +53,14 @@
            "--verbose"
            "--no-fallback"
            "--no-server"
-           "--allow-incomplete-classpath"
-           "--trace-object-instantiation=java.lang.Thread"
-           "-J-Xmx5g"
-           app_ns])
+           "--allow-incomplete-classpath"])
 
-(apply shell {:extra-env extra-env}
-       (cons (native-bin "native-image")
-             args))
+(spit "native-image-args.txt" (str/join " " args))
+
+(prn (cons (native-bin "native-image")
+           args))
+(shell {:extra-env extra-env}
+       (native-bin "native-image")
+       app_ns "@native-image-args.txt")
 
 nil
