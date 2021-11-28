@@ -53,6 +53,9 @@ build_script:
 - cmd: >-
     call bb script/compile.clj
 
+- cmd: >-
+     call bb script/test.clj
+
 artifacts:
 - path: tools-deps-native.exe
   name: tools-deps-native.exe

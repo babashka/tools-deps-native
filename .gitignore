@@ -1,4 +1,5 @@
 tools-deps-native
+tools-deps-native.exe
 .cpcache
 classes
 /*json
@@ -9,3 +10,4 @@ classes
 /target
 !/reflect-config-cleaned.json
 native-image-args.txt
+/tools.bbuild
