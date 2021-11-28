@@ -1,5 +1,5 @@
-tools-deps-native
-tools-deps-native.exe
+/tools-deps-native
+/tools-deps-native.exe
 .cpcache
 classes
 /*json
