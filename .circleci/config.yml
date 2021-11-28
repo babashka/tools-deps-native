@@ -52,10 +52,10 @@ jobs:
           command: |
             bb script/compile.clj
           no_output_timeout: 30m
-      # - run:
-      #     name: Run tests
-      #     command: |
-      #       script/test
+      - run:
+          name: Run tests
+          command: |
+            bb script/test.clj
       # - run:
       #     name: Performance report
       #     command: |
@@ -117,10 +117,10 @@ jobs:
           command: |
             bb script/compile.clj
           no_output_timeout: 30m
-      # - run:
-      #     name: Run tests
-      #     command: |
-      #       script/test
+      - run:
+          name: Run tests
+          command: |
+            bb script/test.clj
       # - run:
       #     name: Performance report
       #     command: |
