@@ -21,6 +21,7 @@ jobs:
           name: Get rid of erroneous git config
           command: |
               rm -rf /home/circleci/.gitconfig
+              # yoooo
       - checkout
       - restore_cache:
           keys:
