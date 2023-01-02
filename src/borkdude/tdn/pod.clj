@@ -14,9 +14,7 @@
 
 (set! *warn-on-reflection* true)
 
-(def repository-system org.eclipse.aether.RepositorySystem)
-
-(def debug? true)
+(def debug? false)
 
 (defn debug [& strs]
   (when debug?
