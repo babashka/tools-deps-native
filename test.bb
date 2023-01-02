@@ -4,5 +4,5 @@
 (pods/load-pod ["clojure" "-M" "-m" "borkdude.tdn.main"]
                #_"./tools-deps-native")
 
-(require '[clojure.tools.deps.alpha :as deps])
+(require '[clojure.tools.deps :as deps])
 (prn (deps/calc-basis {}))

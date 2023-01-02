@@ -22,7 +22,7 @@
       (try
         (let [res (pods/invoke
                    pod-id
-                   'clojure.tools.deps.alpha/-pod-calc-basis
+                   'clojure.tools.deps/-pod-calc-basis
                    [(io/file ".") [{}]])]
           (is (= {:libs {}, :classpath-roots [], :classpath {}}
                  res )))

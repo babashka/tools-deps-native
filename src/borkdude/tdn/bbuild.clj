@@ -1,7 +1,7 @@
 (ns borkdude.tdn.bbuild
   "Helpers for tools.bbuild"
   (:require [clojure.java.io :as jio]
-            [clojure.tools.deps.alpha.util.maven :as mvn])
+            [clojure.tools.deps.util.maven :as mvn])
   (:import
    [org.eclipse.aether.artifact DefaultArtifact]
    [org.eclipse.aether.installation InstallRequest]))

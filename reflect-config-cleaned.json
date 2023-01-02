@@ -11,25 +11,17 @@
 }, {
   "name" : "[J"
 }, {
-  "name" : "[Lclojure.asm.Type;"
-}, {
   "name" : "[Ljava.lang.Object;"
 }, {
   "name" : "[S"
 }, {
   "name" : "[Z"
 }, {
-  "name" : "clojure.tools.deps.alpha.util.S3TransporterFactory",
+  "name" : "clojure.tools.deps.util.S3TransporterFactory",
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ ]
   } ]
-}, {
-  "name" : "java.lang.Class",
-  "queryAllPublicMethods" : true
-}, {
-  "name" : "java.lang.Object",
-  "queryAllPublicMethods" : true
 }, {
   "name" : "java.lang.String",
   "queryAllPublicMethods" : true,
@@ -43,10 +35,6 @@
     "name" : "canAccess",
     "parameterTypes" : [ "java.lang.Object" ]
   } ]
-}, {
-  "name" : "java.security.MessageDigestSpi"
-}, {
-  "name" : "java.security.SecureRandomParameters"
 }, {
   "name" : "java.util.Properties",
   "queryAllPublicMethods" : true,
@@ -101,9 +89,6 @@
     "name" : "getPackaging",
     "parameterTypes" : [ ]
   }, {
-    "name" : "getPrerequisites",
-    "parameterTypes" : [ ]
-  }, {
     "name" : "getScm",
     "parameterTypes" : [ ]
   }, {
@@ -137,10 +122,16 @@
   "name" : "org.apache.maven.model.Scm",
   "queryAllPublicMethods" : true,
   "methods" : [ {
+    "name" : "getConnection",
+    "parameterTypes" : [ ]
+  }, {
     "name" : "getDeveloperConnection",
     "parameterTypes" : [ ]
   }, {
     "name" : "getTag",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getUrl",
     "parameterTypes" : [ ]
   } ]
 }, {
@@ -215,6 +206,12 @@
     "parameterTypes" : [ ]
   } ]
 }, {
+  "name" : "org.eclipse.aether.internal.impl.DefaultLocalPathComposer",
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ]
+}, {
   "name" : "org.eclipse.aether.internal.impl.DefaultLocalRepositoryProvider",
   "methods" : [ {
     "name" : "<init>",
@@ -263,7 +260,7 @@
     "parameterTypes" : [ ]
   } ]
 }, {
-  "name" : "org.eclipse.aether.internal.impl.DefaultSyncContextFactory",
+  "name" : "org.eclipse.aether.internal.impl.DefaultTrackingFileManager",
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ ]
@@ -311,6 +308,24 @@
     "parameterTypes" : [ ]
   } ]
 }, {
+  "name" : "org.eclipse.aether.internal.impl.synccontext.DefaultSyncContextFactory",
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ]
+}, {
+  "name" : "org.eclipse.aether.internal.impl.synccontext.legacy.DefaultSyncContextFactory",
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ]
+}, {
+  "name" : "org.eclipse.aether.internal.impl.synccontext.named.SimpleNamedLockFactorySelector",
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ]
+}, {
   "name" : "org.eclipse.aether.transport.file.FileTransporterFactory",
   "methods" : [ {
     "name" : "<init>",
@@ -318,22 +333,6 @@
   } ]
 }, {
   "name" : "org.eclipse.aether.transport.http.HttpTransporterFactory",
-  "methods" : [ {
-    "name" : "<init>",
-    "parameterTypes" : [ ]
-  } ]
-}, {
-  "name" : "sun.security.provider.NativePRNG",
-  "methods" : [ {
-    "name" : "<init>",
-    "parameterTypes" : [ ]
-  } ],
-  "queriedMethods" : [ {
-    "name" : "<init>",
-    "parameterTypes" : [ "java.security.SecureRandomParameters" ]
-  } ]
-}, {
-  "name" : "sun.security.provider.SHA",
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ ]
