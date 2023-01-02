@@ -17,11 +17,11 @@ jobs:
       BABASHKA_STATIC: true
       BABASHKA_MUSL: true
     steps:
-      - checkout
       - run:
           name: Get rid of erroneous git config
           command: |
               rm -rf /home/circleci/.gitconfig
+      - checkout
       - restore_cache:
           keys:
             - linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
