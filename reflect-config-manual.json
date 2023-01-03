@@ -2,11 +2,32 @@
   "queryAllPublicMethods":true,
   "methods":[
     {"name":"getOutputDirectory","parameterTypes":[] },
+    {"name":"getPackaging","parameterTypes":[] },
     {"name":"getSourceDirectory","parameterTypes":[] },
     {"name":"getTestOutputDirectory","parameterTypes":[] },
-    {"name":"getTestSourceDirectory","parameterTypes":[] },
-    {
-      "name" : "getPackaging",
-      "parameterTypes" : [ ]
-    }
-  ]}]
+    {"name":"getTestSourceDirectory","parameterTypes":[] }
+  ]},
+ {"name":"org.eclipse.aether.internal.impl.DefaultTrackingFileManager",
+  "queryAllPublicMethods":true,
+  "methods":[
+      {"name":"<init>","parameterTypes":[] }]},
+ {"name":"org.eclipse.aether.internal.impl.synccontext.DefaultSyncContextFactory",
+  "queryAllPublicMethods":true,
+  "methods":[
+      {"name":"<init>","parameterTypes":[] }]},
+ {"name":"org.eclipse.aether.internal.impl.synccontext.legacy.DefaultSyncContextFactory",
+  "queryAllPublicMethods":true,
+  "methods":[
+      {"name":"<init>","parameterTypes":[] }]},
+ {"name":"org.eclipse.aether.internal.impl.synccontext.named.SimpleNamedLockFactorySelector",
+  "queryAllPublicMethods":true,
+  "methods":[
+      {"name":"<init>","parameterTypes":[] }]},
+ {"name":"org.eclipse.aether.internal.impl.DefaultLocalPathComposer",
+  "queryAllPublicMethods":true,
+  "methods":[
+      {"name":"<init>","parameterTypes":[] }]},
+ {"name":"clojure.tools.deps.util.S3TransporterFactory",
+  "queryAllPublicMethods":true,
+  "methods":[
+      {"name":"<init>","parameterTypes":[] }]}]

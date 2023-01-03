@@ -11,3 +11,4 @@ classes
 !/reflect-config-cleaned.json
 native-image-args.txt
 /tools.bbuild
+.cache

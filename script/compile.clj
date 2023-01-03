@@ -50,6 +50,7 @@
            "-J-Dclojure.spec.skip-macros=true"
            "-J-Dclojure.compiler.direct-linking=true"
            (str "--initialize-at-build-time=" init-at-build-time ",cognitect,aws,org.slf4j")
+           "--initialize-at-build-time=org.eclipse.aether.transport.http.HttpTransporterFactory"
            "--report-unsupported-elements-at-runtime"
            "--verbose"
            "--no-fallback"

@@ -2,7 +2,7 @@
   (:require
    [clojure.edn :as edn]
    [clojure.java.io :as io]
-   [clojure.tools.deps.alpha :as deps]))
+   [clojure.tools.deps :as deps]))
 
 (def default-repos
   {"central" {:url "https://repo1.maven.org/maven2/"}

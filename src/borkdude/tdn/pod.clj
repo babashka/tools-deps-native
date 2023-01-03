@@ -3,9 +3,10 @@
   (:require
    [bencode.core :as bencode]
    [borkdude.tdn.bbuild]
-   [clojure.tools.deps.alpha]
-   [clojure.tools.deps.alpha.util.dir]
-   [clojure.tools.deps.alpha.util.maven]
+   [clojure.tools.deps]
+   [clojure.tools.deps.util.dir]
+   [clojure.tools.deps.util.maven]
+   [clojure.tools.deps.util.session]
    [clojure.walk :as walk]
    [cognitect.transit :as transit])
   (:import
@@ -108,12 +109,12 @@
 ;;; Implementation
 
 (defn ns-public-syms
-  "Return unqualified syms for all non-macro, non-dynamic vars in ns"
+  "Return unqualified syms for all non-macro, function vars in ns"
   [ns-sym]
   (->> (the-ns ns-sym)
        ns-publics
        (filter #(and (not (:macro (meta (second %))))
-                     (not (:dynamic (meta (second %))))))
+                     (:arglists (meta (second %)))))
        (mapv key)))
 
 (defn ns-public-fq-syms [ns-sym]
@@ -127,6 +128,12 @@
   (assert (> (count (name sym)) 5) (name sym))
   (symbol (namespace sym) (subs (name sym) 5)))
 
+(def standard-repos-form
+  `(~'def ~'standard-repos ~clojure.tools.deps.util.maven/standard-repos))
+
+(def session-cache-form
+  '(def session (java.util.concurrent.ConcurrentHashMap.)))
+
 (def dir-var-form
   '(def ^:dynamic *the-dir*
      (clojure.java.io/file (System/getProperty "user.dir"))))
@@ -134,21 +141,21 @@
 (def with-dir-form-str
   (str
    "(defmacro with-dir [^java.io.File dir & body] "
-   " `(binding [clojure.tools.deps.alpha.util.dir/*the-dir* ~dir] ~@body))"))
+   " `(binding [clojure.tools.deps.util.dir/*the-dir* ~dir] ~@body))"))
 
 (defn client-invoke-with-dir-form
   [f-sym]
   `(~'defn ~f-sym [& ~'args]
     (~(wrapped-sym f-sym)
-     clojure.tools.deps.alpha.util.dir/*the-dir*
+     clojure.tools.deps.util.dir/*the-dir*
      ~'args)))
 
 (defn pod-apply-with-dir-form [s args-sym]
   (assert (symbol? s) (str s))
   (assert (symbol? args-sym) (str args-sym)) ; no need to let bind
-  `(binding [clojure.tools.deps.alpha.util.dir/*the-dir*
-             (clojure.tools.deps.alpha.util.dir/canonicalize (first ~args-sym))]
-     (debug :dir (clojure.tools.deps.alpha.util.dir/canonicalize (first ~args-sym)))
+  `(binding [clojure.tools.deps.util.dir/*the-dir*
+             (clojure.tools.deps.util.dir/canonicalize (first ~args-sym))]
+     (debug :dir (clojure.tools.deps.util.dir/canonicalize (first ~args-sym)))
      (apply ~s (second ~args-sym))))
 
 (defn dispatch* [sym args]
@@ -157,10 +164,10 @@
         (reduce
          into []
          [(ns-public-fq-syms 'borkdude.tdn.bbuild)
-          (ns-public-fq-syms 'clojure.tools.deps.alpha)
-          (ns-public-fq-syms 'clojure.tools.deps.alpha.util.dir)
-          (ns-public-fq-syms 'clojure.tools.deps.alpha.util.io)
-          (ns-public-fq-syms 'clojure.tools.deps.alpha.util.maven)])]
+          (ns-public-fq-syms 'clojure.tools.deps)
+          (ns-public-fq-syms 'clojure.tools.deps.util.dir)
+          (ns-public-fq-syms 'clojure.tools.deps.util.io)
+          (ns-public-fq-syms 'clojure.tools.deps.util.maven)])]
     `(let [~args-sym ~args
            sym#      ~sym]
        (case sym#
@@ -229,22 +236,32 @@
                          :code (reg-transit-handlers)} ]}
                 ;; NOTE: order is important here.  We need to define *the-dir*
                 ;; before anything that refers to it
-                {:name 'clojure.tools.deps.alpha.util.dir
+                {:name 'clojure.tools.deps.util.dir
                  :vars (into
                         [{:name "*the-dir*"
                           :code (pr-form dir-var-form)}
                          {:name "with-dir"
                           :code with-dir-form-str}]
                         (public-wrapped-var-maps
-                         'clojure.tools.deps.alpha.util.dir))}
-                {:name 'clojure.tools.deps.alpha
-                 :vars (public-wrapped-var-maps 'clojure.tools.deps.alpha)}
-                {:name 'clojure.tools.deps.alpha.util.io
+                         'clojure.tools.deps.util.dir))}
+                {:name 'clojure.tools.deps
+                 :vars (public-wrapped-var-maps 'clojure.tools.deps)}
+                {:name 'clojure.tools.deps.util.io
                  :vars (public-wrapped-var-maps
-                        'clojure.tools.deps.alpha.util.io)}
-                {:name 'clojure.tools.deps.alpha.util.maven
-                 :vars (public-wrapped-var-maps
-                        'clojure.tools.deps.alpha.util.maven)}
+                        'clojure.tools.deps.util.io)}
+                {:name 'clojure.tools.deps.util.maven
+                 :vars (into
+                        [{:name "standard-repos"
+                          :code (pr-form standard-repos-form)}]
+                        (public-wrapped-var-maps
+                         'clojure.tools.deps.util.maven))}
+                {:name 'clojure.tools.deps.util.session
+                 :vars (into
+                        [
+                         #_{:name "session"
+                            :code (pr-form session-cache-form)}]
+                        (public-wrapped-var-maps
+                         'clojure.tools.deps.util.session))}
                 {:name 'borkdude.tdn.bbuild
                  :vars (public-wrapped-var-maps 'borkdude.tdn.bbuild)}]
    :opts       {:shutdown {}}})
@@ -259,7 +276,7 @@
 (defmacro with-message [[id] & body]
   `(let [id# ~id]
      (try
-       (let [val# (do ~@body)
+       (let [val#     (do ~@body)
              transit# (write-transit val#)]
          (debug :transit transit#)
          (write-bencode
@@ -267,9 +284,10 @@
            "id"     id#
            "status" ["done"]}))
        (catch Exception e#
+         (debug e#)
          (write-bencode
           (error-map
-           (ex-message e#)
+           (or (ex-message e#) "")
            (assoc (ex-data e#) :type (str (class e#)))
            id#))))))
 
@@ -288,6 +306,8 @@
       (let [op (some-> (get msg "op") read-keyword)
             id (or (some-> (get msg "id") read-string) "unknown")]
         (debug :op op :id id)
+        (debug :user.home (System/getProperty "user.home"))
+        (debug :user.dir (System/getProperty "user.dir"))
         (case op
           :describe (write-map description)
           :invoke   (with-message [id]

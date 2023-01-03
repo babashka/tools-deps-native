@@ -2,19 +2,23 @@
   (:require
    [borkdude.tdn.cli :as cli]
    [borkdude.tdn.pod :as pod]
+   [clojure.datafy]                     ; needed for graalvm
    [clojure.java.io :as io]
+   [clojure.pprint]                     ; needed for graalvm
+   [clojure.reflect]                    ; needed for graalvm
+   [clojure.reflect.java]               ; needed for graalvm
    [clojure.string :as str]
-   [clojure.tools.deps.alpha]
-   [clojure.tools.deps.alpha.util.dir :as dir]
-   [clojure.tools.deps.alpha.util.maven :as mvn])
+   [clojure.tools.deps]
+   [clojure.tools.deps.util.dir :as dir]
+   [clojure.tools.deps.util.maven :as mvn])
   (:gen-class))
 
 (defmacro reference-publics []
-  (let [publics (-> (the-ns 'clojure.tools.deps.alpha)
+  (let [publics (-> (the-ns 'clojure.tools.deps)
                     ns-publics
                     keys)]
     `(def publics# ~(vec (for [sym publics]
-                           (symbol "clojure.tools.deps.alpha"
+                           (symbol "clojure.tools.deps"
                                    (name sym)))))))
 
 (reference-publics)
