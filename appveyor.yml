@@ -49,7 +49,7 @@ build_script:
 
     powershell -Command "if (Test-Path('graalvm')) { return } else { Expand-Archive graalvm.zip graalvm }"
 
-    powershell -Command "if (Test-Path('bb.exe')) { return } else { (New-Object Net.WebClient).DownloadFile('https://github.com/borkdude/babashka/releases/download/v0.6.5/babashka-0.6.5-windows-amd64.zip', 'bb.zip') }"
+    powershell -Command "if (Test-Path('bb.exe')) { return } else { (New-Object Net.WebClient).DownloadFile('https://github.com/babashka/babashka-dev-builds/releases/download/v1.0.169-SNAPSHOT/babashka-1.0.169-SNAPSHOT-windows-amd64.zip', 'bb.zip') }"
 
     powershell -Command "if (Test-Path('bb.exe')) { return } else { Expand-Archive bb.zip . }"
 
