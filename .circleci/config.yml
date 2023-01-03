@@ -116,6 +116,7 @@ jobs:
           command: |
             bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
             sudo mv bb /usr/local/bin
+            # trigger CI
       - run:
           name: Build binary
           command: |
