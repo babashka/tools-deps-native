@@ -21,7 +21,6 @@ jobs:
           name: Get rid of erroneous git config
           command: |
               rm -rf /home/circleci/.gitconfig
-              # yoooo
       - checkout
       - restore_cache:
           keys:
@@ -49,7 +48,7 @@ jobs:
       - run:
           name: Install bb
           command: |
-            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd)
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
             sudo mv bb /usr/local/bin
             bb --version
       - run:
@@ -115,7 +114,7 @@ jobs:
       - run:
           name: Install bb
           command: |
-            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd)
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
             sudo mv bb /usr/local/bin
       - run:
           name: Build binary
