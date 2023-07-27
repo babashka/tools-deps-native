@@ -30,4 +30,7 @@
  {"name":"clojure.tools.deps.util.S3TransporterFactory",
   "queryAllPublicMethods":true,
   "methods":[
-      {"name":"<init>","parameterTypes":[] }]}]
+    {"name":"<init>","parameterTypes":[] }]},
+ {"name": "org.apache.maven.model.Model",
+  "methods": [{"name": "getParent"}]}
+]
