@@ -27,4 +27,15 @@
           (is (= {:libs {}, :classpath-roots [], :classpath {}}
                  res )))
         (finally
+          (pods/unload-pod pod-id)))))
+  (testing "more complex deps.edn"
+    (let [pod-id (pods/load-pod pod-spec)]
+      (try
+        (let [res (pods/invoke
+                   pod-id
+                   'clojure.tools.deps/-pod-calc-basis
+                   [(io/file "test/test-deps.edn") [{}]])]
+          (is (= {:libs {}, :classpath-roots [], :classpath {}}
+                 res )))
+        (finally
           (pods/unload-pod pod-id))))))

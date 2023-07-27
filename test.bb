@@ -5,4 +5,4 @@
                #_"./tools-deps-native")
 
 (require '[clojure.tools.deps :as deps])
-(prn (deps/calc-basis {}))
+(prn (deps/calc-basis {:project "test/test-deps.edn" :aliases [:env/dev]}))
