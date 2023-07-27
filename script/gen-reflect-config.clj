@@ -32,7 +32,8 @@
 (trace ["create-basis"
         ;; NOTE adding an s3 dep here would enable s3 support?
         ;; adding buddy-core 1.10.1 triggers reflection on
-        "{:extra {:deps {buddy/buddy-core {:mvn/version \"1.10.1\"}}}}"])
+        "{:extra {:deps {buddy/buddy-core {:mvn/version \"1.10.1\"}
+                         software.amazon.awssdk/s3-transfer-manager {:mvn/version \"2.20.58\"}}}}"])
 
 (trace->config ".")
 

@@ -89,6 +89,9 @@
     "name" : "getPackaging",
     "parameterTypes" : [ ]
   }, {
+    "name" : "getParent",
+    "parameterTypes" : [ ]
+  }, {
     "name" : "getScm",
     "parameterTypes" : [ ]
   }, {
@@ -109,6 +112,13 @@
   "queryAllPublicMethods" : true,
   "methods" : [ {
     "name" : "getName",
+    "parameterTypes" : [ ]
+  } ]
+}, {
+  "name" : "org.apache.maven.model.Parent",
+  "queryAllPublicMethods" : true,
+  "methods" : [ {
+    "name" : "getVersion",
     "parameterTypes" : [ ]
   } ]
 }, {

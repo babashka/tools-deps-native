@@ -34,5 +34,7 @@
  {"name": "org.apache.maven.model.Model",
   "allPublicMethods": true},
  {"name": "org.apache.maven.model.Build",
+  "allPublicMethods": true},
+ {"name": "org.apache.maven.model.Parent",
   "allPublicMethods": true}
 ]
