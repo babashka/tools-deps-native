@@ -13,6 +13,8 @@
 }, {
   "name" : "[Ljava.lang.Object;"
 }, {
+  "name" : "[Ljava.nio.file.LinkOption;"
+}, {
   "name" : "[S"
 }, {
   "name" : "[Z"

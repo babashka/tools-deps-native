@@ -2,7 +2,8 @@
   (:require
    [clojure.edn :as edn]
    [clojure.java.io :as io]
-   [clojure.tools.deps :as deps]))
+   [clojure.tools.deps :as deps]
+   [babashka.fs :as fs]))
 
 (def default-repos
   {"central" {:url "https://repo1.maven.org/maven2/"}
@@ -75,6 +76,7 @@ Use tools-deps.edn help <cmd> to get more specific help"))
 
 (defn create-basis [args]
   (let [arg  (first args)
+        arg (if (fs/exists? arg) (slurp arg) arg)
         deps (edn/read-string arg)]
     (if (map? deps)
       (prn (-> deps
@@ -83,7 +85,7 @@ Use tools-deps.edn help <cmd> to get more specific help"))
                deps/create-basis))
       (binding [*out* *err*]
         (throw
-         (ex-info (str"Invalid argument " deps ", expeccted a map") {}))))))
+         (ex-info (str"Invalid argument " deps ", expected a map") {}))))))
 
 (defn deps [args]
   (let [arg  (first args)

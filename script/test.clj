@@ -23,6 +23,6 @@
 
 (shell native-executable "create-basis" '{:extra {:deps {buddy/buddy-core {:mvn/version "1.10.1"}}}})
 
-(shell native-executable "create-basis" (edn/read-string (slurp "test/bbuild-issue-10-deps.edn")))
+(shell native-executable "create-basis" (str (fs/file "test" "bbuild-issue-10-deps.edn")))
 
 nil
