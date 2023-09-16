@@ -1,8 +1,8 @@
 {:deps
- {com.cognitect/transit-clj {:mvn/version "1.0.324"}
-  org.clojure/clojure       {:mvn/version "1.10.3"}
-  org.clojure/tools.deps    {:mvn/version "0.16.1264"}
-  org.slf4j/slf4j-jdk14     {:mvn/version "1.7.9"}
+ {com.cognitect/transit-clj {:mvn/version "1.0.333"}
+  org.clojure/clojure       {:mvn/version "1.11.1"}
+  org.clojure/tools.deps    {:mvn/version "0.18.1354"}
+  org.slf4j/slf4j-jdk14     {:mvn/version "2.0.9"}
   javax.xml.bind/jaxb-api   {:mvn/version "2.3.1"}
   nrepl/bencode             {:mvn/version "1.1.0"}
   babashka/fs               {:mvn/version "0.4.19"}}
@@ -12,17 +12,19 @@
             :jvm-opts  ["-Dclojure.compiler.direct-linking=true"]}
 
            :compile {:main-opts  ["-m" "borkdude.tdn.main"]
-                     :extra-deps {babashka/fs {:mvn/version "0.0.1"}}
+                     :extra-deps {babashka/fs {:mvn/version "0.4.19"}}
                      :extra-paths ["classes"]}
            :test
            {:extra-paths ["test"]
             :extra-deps
-            {babashka/fs {:mvn/version "0.1.1"}
+            {babashka/fs {:mvn/version "0.4.19"}
              io.github.cognitect-labs/test-runner
-             {:git/tag "v0.5.0" :git/sha "b3fd0d2"}
+             {:git/url "https://github.com/cognitect-labs/test-runner"
+              :git/tag "v0.5.1"
+              :git/sha "dfb30dd"}
              babashka/babashka.pods
              {:git/url "https://github.com/babashka/babashka.pods"
-              :sha     "de4c3610c9ef3879370d01b7202a9f3a9d056f6e"}}
+              :git/sha "8b717eb001811bc5da5d15d1163565de00b4ffa4"}}
             :main-opts   ["-m" "cognitect.test-runner"]
             :exec-fn     cognitect.test-runner.api/test}
 
