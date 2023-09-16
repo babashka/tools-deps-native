@@ -26,8 +26,8 @@
     (if (and ght (contains? #{"master" "main"} branch))
       (do (assert file "File name must be provided")
           (println "On main branch. Publishing asset.")
-          (ghr/overwrite-asset {:org "borkdude"
-                                :repo "jet"
+          (ghr/overwrite-asset {:org "timokramer"
+                                :repo "tools-deps-native"
                                 :file file
                                 :tag (str "v" current-version)
                                 :draft true
