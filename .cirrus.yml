@@ -1,0 +1,32 @@
+macos_instance:
+  image: ghcr.io/cirruslabs/macos-monterey-base:latest
+
+task:
+  env:
+    GRAALVM_VERSION: "22.3.1"
+    GRAALVM_HOME: ${HOME}/graalvm-ce-java19-22.3.1/Contents/Home
+    TDN_PLATFORM: macos # used in release script
+    TDN_ARCH: aarch64
+    TDN_TEST_ENV: native
+    GITHUB_TOKEN: ENCRYPTED[4aa5e760a9030e11369c9ac4146a12092fe1f1fd44347e82232dd14f9b84df5fa676dcb54310ab8128b43335940b7033]
+  script: |
+    sudo script/install-clojure
+    bash -x script/install-graalvm
+    export PATH=$GRAALVM_HOME/bin:$PATH
+    ls -lahrt $GRAALVM_HOME
+    export JAVA_HOME=$GRAALVM_HOME
+    sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+    java -version
+
+    bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
+    sudo mv bb /usr/local/bin
+    bb script/compile.clj
+    bb script/test.clj
+
+    VERSION=$(cat resources/TDN_VERSION)
+    archive="tools-deps-native-${VERSION}-${TDN_PLATFORM}-${TDN_ARCH:-amd64}.tar.gz"
+    tar zcvf "$archive" tools-deps-native
+    bb release-artifact "$archive" || true
+  binaries_artifacts:
+    path: "tools-deps-native-*.tar.gz"
+
