@@ -8,7 +8,7 @@ task:
     TDN_PLATFORM: macos # used in release script
     TDN_ARCH: aarch64
     TDN_TEST_ENV: native
-    GITHUB_TOKEN: ENCRYPTED[d6ff8cdc392157f211c754fa0763875434d1bfde0c00a05e48ba9470003a76c14c9213adb80623f81e13f2f0fa8fbd57]
+    GITHUB_TOKEN: ENCRYPTED[4aa5e760a9030e11369c9ac4146a12092fe1f1fd44347e82232dd14f9b84df5fa676dcb54310ab8128b43335940b7033]
   script: |
     sudo script/install-clojure
     bash -x script/install-graalvm
