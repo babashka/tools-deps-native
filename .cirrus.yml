@@ -24,10 +24,9 @@ task:
     bb script/test.clj
 
     VERSION=$(cat resources/TDN_VERSION)
-    arch=${TDN_ARCH:-amd64}
-    archive="tools-deps-native-$VERSION-$TDN_PLATFORM-$arch.tar.gz"
-    tar zcvf "$archive" bb
-    ./bb --deps-root . release-artifact "$archive" || true
+    archive="tools-deps-native-${VERSION}-${TDN_PLATFORM}-${TDN_ARCH:-amd64}.tar.gz"
+    tar zcvf "$archive" tools-deps-native
+    ./bb release-artifact "$archive" || true
   binaries_artifacts:
     path: "tools-deps-native-*.tar.gz"
 
