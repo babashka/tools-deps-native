@@ -21,7 +21,7 @@
         branch (current-branch)
         _ (println "On branch:" branch)
         current-version
-        (-> (slurp "resources/TDN_VERSION")
+        (-> (slurp "resources/META-INF/borkdude/tools-deps-native/version.txt")
             str/trim)]
     (if (and ght (contains? #{"master" "main"} branch))
       (do (assert file "File name must be provided")
