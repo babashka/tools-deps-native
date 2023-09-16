@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.2
+
+- Upgrade libraries, including tools.deps
+- Provide binary for macos aarch64
+
 ## v0.1.1
 
 - Fix reflection issues with certain dependencies (see https://github.com/babashka/tools.bbuild/issues/10)
