@@ -6,7 +6,7 @@ INSTALL_DIR="${1:-$HOME}"
 
 GRAALVM_VERSION="${GRAALVM_VERSION:-21.2.0}"
 
-case "$JET_PLATFORM" in
+case "$TDN_PLATFORM" in
 	macos)
 		GRAALVM_PLATFORM="darwin"
 		;;
@@ -15,7 +15,7 @@ case "$JET_PLATFORM" in
 		;;
 esac
 
-case "${JET_ARCH:-}" in
+case "${TDN_ARCH:-}" in
 	aarch64)
 		GRAALVM_ARCH="aarch64"
 		;;
