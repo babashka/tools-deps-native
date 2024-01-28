@@ -42,8 +42,8 @@ jobs:
           command: |
             cd ~
             if ! [ -d graalvm-ce-java11-22.3.0 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java11-linux-amd64-22.3.1.tar.gz
-              tar xzf graalvm-ce-java11-linux-amd64-22.3.1.tar.gz
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java11-linux-amd64-22.3.3.tar.gz
+              tar xzf graalvm-ce-java11-linux-amd64-22.3.3.tar.gz
             fi
       - run:
           name: Install bb
@@ -71,7 +71,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-22.3.1
+            - ~/graalvm-ce-java11-22.3.3
           key: linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
@@ -83,7 +83,7 @@ jobs:
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-ce-java11-22.3.1
+      GRAALVM_HOME: /home/circleci/graalvm-ce-java11-22.3.3
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
@@ -113,7 +113,7 @@ jobs:
           name: Download GraalVM
           command: |
             cd ~
-            if ! [ -d graalvm-ce-java11-22.3.1 ]; then
+            if ! [ -d graalvm-ce-java11-22.3.3 ]; then
               /bin/wget -O graalvm.tar.gz https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-aarch64_bin.tar.gz
               /bin/mkdir graalvm
               /bin/tar -xzf graalvm.tar.gz --directory graalvm --strip-components 1
@@ -148,7 +148,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-22.3.1
+            - ~/graalvm-ce-java11-22.3.3
           key: linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
