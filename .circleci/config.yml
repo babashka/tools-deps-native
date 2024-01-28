@@ -77,7 +77,6 @@ jobs:
           path: /tmp/release
           destination: release
   linux-aarch64:
-    resource_class: arm.large
     machine:
       image: ubuntu-2204:2023.10.1
       resource_class: arm.large
