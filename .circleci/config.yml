@@ -78,8 +78,9 @@ jobs:
           destination: release
   linux-aarch64:
     resource_class: arm.large
-    docker:
-      - image: circleci/clojure:openjdk-11-lein-2.9.6-bullseye
+    machine:
+      image: ubuntu-2204:2023.10.1
+      resource_class: arm.large
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
