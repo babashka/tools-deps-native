@@ -113,14 +113,13 @@ jobs:
           name: Download GraalVM
           command: |
             cd ~
-            if ! [ -d graalvm-ce-java11-22.3.3 ]; then
-              /bin/wget -O graalvm.tar.gz https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-aarch64_bin.tar.gz
-              /bin/mkdir graalvm
-              /bin/tar -xzf graalvm.tar.gz --directory graalvm --strip-components 1
-              sudo update-alternatives --install /usr/bin/java java /home/circleci/graalvm/bin/java 0
-              sudo update-alternatives --install /usr/bin/javac javac /home/circleci/graalvm/bin/javac 0
-              sudo update-alternatives --set java /home/circleci/graalvm/bin/java
-              sudo update-alternatives --set javac /home/circleci/graalvm/bin/javac
+            if ! [ -d graalvm-ce-java11-22.3.0 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java11-linux-amd64-22.3.3.tar.gz
+              tar xzf graalvm-ce-java11-linux-amd64-22.3.3.tar.gz
+              sudo update-alternatives --install /usr/bin/java java /home/circleci/graalvm-ce-java11-22.3.3/bin/java 0
+              sudo update-alternatives --install /usr/bin/javac javac /home/circleci/graalvm-ce-java11-22.3.3/bin/javac 0
+              sudo update-alternatives --set java /home/circleci/graalvm-ce-java11-22.3.3/bin/java
+              sudo update-alternatives --set javac /home/circleci/graalvm-ce-java11-22.3.3/bin/javac
             fi
       - run:
           name: Install bb
