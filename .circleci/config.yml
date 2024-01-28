@@ -87,7 +87,7 @@ jobs:
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
-      BABASHKA_MUSL: true
+      BABASHKA_MUSL: false
     steps:
       - run:
           name: Get rid of erroneous git config
