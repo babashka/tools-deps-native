@@ -252,6 +252,7 @@ workflows:
     jobs:
 #      - jvm
       - linux
+      - linux-aarch64
       - mac
       - deploy:
           filters:
