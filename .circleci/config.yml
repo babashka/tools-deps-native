@@ -96,7 +96,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
+            - linux-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - run:
           name: Install Clojure
           command: |
@@ -113,7 +113,7 @@ jobs:
           name: Download GraalVM
           command: |
             cd ~
-            if ! [ -d graalvm-ce-java11-22.3.0 ]; then
+            if ! [ -d graalvm-ce-java11-22.3.3 ]; then
               curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java11-linux-aarch64-22.3.3.tar.gz
               tar xzf graalvm-ce-java11-linux-aarch64-22.3.3.tar.gz
             fi
@@ -144,7 +144,7 @@ jobs:
           paths:
             - ~/.m2
             - ~/graalvm-ce-java11-22.3.3
-          key: linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
+          key: linux-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
           destination: release
