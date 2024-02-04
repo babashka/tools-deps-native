@@ -23,7 +23,7 @@ task:
     bb script/compile.clj
     bb script/test.clj
 
-    VERSION=$(cat resources/TDN_VERSION)
+    VERSION=$(cat resources/META-INF/borkdude/tools-deps-native/version.txt)
     archive="tools-deps-native-${VERSION}-${TDN_PLATFORM}-${TDN_ARCH:-amd64}.tar.gz"
     tar zcvf "$archive" tools-deps-native
     bb release-artifact "$archive" || true
