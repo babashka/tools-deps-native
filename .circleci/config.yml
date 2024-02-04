@@ -7,11 +7,11 @@ jobs:
   linux:
     resource_class: large
     docker:
-      - image: circleci/clojure:openjdk-11-lein-2.9.6-bullseye
+      - image: cimg/clojure:1.11.1-openjdk-17.0
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-ce-java11-22.3.3
+      GRAALVM_HOME: /home/circleci/graalvm-community-openjdk-21.0.2+13.1
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
@@ -25,12 +25,12 @@ jobs:
       - restore_cache:
           keys:
             - linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
-      - run:
-          name: Install Clojure
-          command: |
-            wget https://download.clojure.org/install/linux-install-1.10.3.1029.sh
-            chmod +x linux-install-1.10.3.1029.sh
-            sudo ./linux-install-1.10.3.1029.sh
+      # - run:
+      #     name: Install Clojure
+      #     command: |
+      #       wget https://download.clojure.org/install/linux-install-1.10.3.1029.sh
+      #       chmod +x linux-install-1.10.3.1029.sh
+      #       sudo ./linux-install-1.10.3.1029.sh
       - run:
           name: Install native dev tools
           command: |
@@ -41,16 +41,16 @@ jobs:
           name: Download GraalVM
           command: |
             cd ~
-            if ! [ -d graalvm-ce-java11-22.3.3 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java11-linux-amd64-22.3.3.tar.gz
-              tar xzf graalvm-ce-java11-linux-amd64-22.3.3.tar.gz
+            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
+              tar xzf graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
             fi
-      - run:
-          name: Install bb
-          command: |
-            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
-            sudo mv bb /usr/local/bin
-            bb --version
+      # - run:
+      #     name: Install bb
+      #     command: |
+      #       bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
+      #       sudo mv bb /usr/local/bin
+      #       bb --version
       - run:
           name: Build binary
           command: |
@@ -71,7 +71,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-22.3.3
+            - ~/graalvm-community-openjdk-21.0.2+13.1
           key: linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
@@ -83,7 +83,7 @@ jobs:
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-ce-java11-22.3.3
+      GRAALVM_HOME: /home/circleci/graalvm-community-openjdk-21.0.2+13.1
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
@@ -113,9 +113,9 @@ jobs:
           name: Download GraalVM
           command: |
             cd ~
-            if ! [ -d graalvm-ce-java11-22.3.3 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java11-linux-aarch64-22.3.3.tar.gz
-              tar xzf graalvm-ce-java11-linux-aarch64-22.3.3.tar.gz
+            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-aarch64_bin.tar.gz
+              tar xzf graalvm-community-jdk-21.0.2_linux-aarch64_bin.tar.gz
             fi
       - run:
           name: Install bb
@@ -143,7 +143,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-22.3.3
+            - ~/graalvm-community-openjdk-21.0.2+13.1
           key: linux-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
@@ -153,7 +153,7 @@ jobs:
       xcode: "14.0.0"
     resource_class: large
     environment:
-      GRAALVM_HOME: /Users/distiller/graalvm-ce-java11-22.3.3/Contents/Home
+      GRAALVM_HOME: /Users/distiller/graalvm-community-openjdk-21.0.2+13.1/Contents/Home
       APP_PLATFORM: macos # used in release script
       APP_TEST_ENV: native
     steps:
@@ -179,9 +179,9 @@ jobs:
           command: |
             cd ~
             ls -la
-            if ! [ -d graalvm-ce-java11-22.3.3 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java11-darwin-amd64-22.3.3.tar.gz
-              tar xzf graalvm-ce-java11-darwin-amd64-22.3.3.tar.gz
+            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_macos-x64_bin.tar.gz
+              tar xzf graalvm-community-jdk-21.0.2_macos-x64_bin.tar.gz
             fi
       - run:
           name: Install bb
@@ -208,14 +208,14 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-22.3.3
+            - ~/graalvm-community-openjdk-21.0.2+13.1
           key: mac-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
           destination: release
   deploy:
     docker:
-      - image: circleci/clojure:openjdk-11-lein-2.9.6-bullseye
+      - image: cimg/clojure:1.11.1-openjdk-17.0
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
