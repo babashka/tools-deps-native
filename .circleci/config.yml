@@ -25,12 +25,6 @@ jobs:
       - restore_cache:
           keys:
             - linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
-      # - run:
-      #     name: Install Clojure
-      #     command: |
-      #       wget https://download.clojure.org/install/linux-install-1.10.3.1029.sh
-      #       chmod +x linux-install-1.10.3.1029.sh
-      #       sudo ./linux-install-1.10.3.1029.sh
       - run:
           name: Install native dev tools
           command: |
@@ -45,12 +39,12 @@ jobs:
               curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
               tar xzf graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
             fi
-      # - run:
-      #     name: Install bb
-      #     command: |
-      #       bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
-      #       sudo mv bb /usr/local/bin
-      #       bb --version
+      - run:
+          name: Install bb
+          command: |
+            # bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
+            # sudo mv bb /usr/local/bin
+            bb --version
       - run:
           name: Build binary
           command: |
