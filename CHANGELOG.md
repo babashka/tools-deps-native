@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.5
+
+- Fix NPE when `deps.edn` doesn't exist
+
 ## v0.1.4
 
 - Fix linux amd64 (got mixed up with aarch64)
