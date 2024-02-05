@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.4
+
+- Fix linux amd64 (got mixed up with aarch64)
+
 ## v0.1.3
 
 - Include linux aarch64 binary ([@TimoKramer](https://github.com/TimoKramer))
