@@ -53,7 +53,7 @@
 (def jiofile-key (str ::file))
 
 (def jiofile-read-handler
-  (transit/read-handler (fn [^String s] (java.io.File. s))))
+  (transit/read-handler (fn [^String s] (java.io.File. (str s)))))
 
 (def jiofile-write-handler
   (transit/write-handler jiofile-key str))
