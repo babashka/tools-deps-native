@@ -36,5 +36,7 @@
  {"name": "org.apache.maven.model.Build",
   "allPublicMethods": true},
  {"name": "org.apache.maven.model.Parent",
+  "allPublicMethods": true},
+ {"name": "java.io.File",
   "allPublicMethods": true}
 ]
