@@ -9,7 +9,9 @@ cd /tmp/release
 
 ## release binary as zip archive
 
-zip "tools-deps-native-$VERSION-$APP_PLATFORM-amd64.zip" tools-deps-native
+arch=${BABASHKA_ARCH:-amd64}
+
+zip "tools-deps-native-$VERSION-$APP_PLATFORM-$arch.zip" tools-deps-native
 
 ## cleanup
 

@@ -82,6 +82,7 @@ jobs:
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
       BABASHKA_MUSL: false
+      BABASHKA_ARCH: aarch64
     steps:
       - run:
           name: Get rid of erroneous git config

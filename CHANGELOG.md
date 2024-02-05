@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.3
+
+- Include linux aarch64 binary ([@TimoKramer](https://github.com/TimoKramer))
+- Bump deps
+
 ## v0.1.2
 
 - Upgrade libraries, including tools.deps
