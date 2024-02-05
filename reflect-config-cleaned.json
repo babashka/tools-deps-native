@@ -25,24 +25,28 @@
     "parameterTypes" : [ ]
   } ]
 }, {
-  "name" : "java.lang.String",
-  "queryAllPublicMethods" : true,
-  "methods" : [ {
-    "name" : "contains",
-    "parameterTypes" : [ "java.lang.CharSequence" ]
+  "name" : "java.lang.Thread",
+  "fields" : [ {
+    "name" : "threadLocalRandomProbe"
   } ]
 }, {
-  "name" : "java.lang.reflect.AccessibleObject",
-  "methods" : [ {
-    "name" : "canAccess",
-    "parameterTypes" : [ "java.lang.Object" ]
+  "name" : "java.security.SecureRandomParameters"
+}, {
+  "name" : "java.util.concurrent.atomic.AtomicBoolean",
+  "fields" : [ {
+    "name" : "value"
   } ]
 }, {
-  "name" : "java.util.Properties",
-  "queryAllPublicMethods" : true,
-  "methods" : [ {
-    "name" : "getProperty",
-    "parameterTypes" : [ "java.lang.String" ]
+  "name" : "java.util.concurrent.atomic.AtomicReference",
+  "fields" : [ {
+    "name" : "value"
+  } ]
+}, {
+  "name" : "java.util.concurrent.atomic.Striped64",
+  "fields" : [ {
+    "name" : "base"
+  }, {
+    "name" : "cellsBusy"
   } ]
 }, {
   "name" : "org.apache.maven.model.Build",
@@ -345,6 +349,22 @@
   } ]
 }, {
   "name" : "org.eclipse.aether.transport.http.HttpTransporterFactory",
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ]
+}, {
+  "name" : "sun.security.provider.NativePRNG",
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "queriedMethods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ "java.security.SecureRandomParameters" ]
+  } ]
+}, {
+  "name" : "sun.security.provider.SHA",
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ ]
