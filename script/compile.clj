@@ -10,8 +10,6 @@
 (def app_name "tools-deps-native")
 (def app_ns "borkdude.tdn.main")
 
-(shell (native-bin "gu") "install" "native-image")
-
 (fs/delete-tree "classes")
 (fs/delete-tree "tools-deps-native")
 (fs/create-dir "classes")

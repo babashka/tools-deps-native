@@ -7,11 +7,11 @@ jobs:
   linux:
     resource_class: large
     docker:
-      - image: circleci/clojure:openjdk-11-lein-2.9.6-bullseye
+      - image: cimg/clojure:1.11.1-openjdk-17.0
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-ce-java11-22.3.0
+      GRAALVM_HOME: /home/circleci/graalvm-community-openjdk-21.0.2+13.1
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
@@ -25,6 +25,72 @@ jobs:
       - restore_cache:
           keys:
             - linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
+      - run:
+          name: Install native dev tools
+          command: |
+            sudo apt-get update
+            sudo apt-get -y install gcc g++ zlib1g-dev
+            sudo -E script/setup-musl
+      - run:
+          name: Download GraalVM
+          command: |
+            cd ~
+            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
+              tar xzf graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
+            fi
+      - run:
+          name: Install bb
+          command: |
+            # bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
+            # sudo mv bb /usr/local/bin
+            bb --version
+      - run:
+          name: Build binary
+          command: |
+            bb script/compile.clj
+          no_output_timeout: 30m
+      - run:
+          name: Run tests
+          command: |
+            bb script/test.clj
+      # - run:
+      #     name: Performance report
+      #     command: |
+      #       .circleci/script/performance
+      - run:
+          name: Release
+          command: |
+            .circleci/script/release
+      - save_cache:
+          paths:
+            - ~/.m2
+            - ~/graalvm-community-openjdk-21.0.2+13.1
+          key: linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
+      - store_artifacts:
+          path: /tmp/release
+          destination: release
+  linux-aarch64:
+    machine:
+      image: ubuntu-2204:2023.10.1
+      resource_class: arm.large
+    working_directory: ~/repo
+    environment:
+      LEIN_ROOT: "true"
+      GRAALVM_HOME: /home/circleci/graalvm-community-openjdk-21.0.2+13.1
+      APP_PLATFORM: linux # used in release script
+      APP_TEST_ENV: native
+      BABASHKA_STATIC: true
+      BABASHKA_MUSL: false
+    steps:
+      - run:
+          name: Get rid of erroneous git config
+          command: |
+              rm -rf /home/circleci/.gitconfig
+      - checkout
+      - restore_cache:
+          keys:
+            - linux-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - run:
           name: Install Clojure
           command: |
@@ -41,9 +107,9 @@ jobs:
           name: Download GraalVM
           command: |
             cd ~
-            if ! [ -d graalvm-ce-java11-22.3.0 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java11-linux-amd64-22.3.0.tar.gz
-              tar xzf graalvm-ce-java11-linux-amd64-22.3.0.tar.gz
+            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-aarch64_bin.tar.gz
+              tar xzf graalvm-community-jdk-21.0.2_linux-aarch64_bin.tar.gz
             fi
       - run:
           name: Install bb
@@ -71,8 +137,8 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-22.3.0
-          key: linux-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
+            - ~/graalvm-community-openjdk-21.0.2+13.1
+          key: linux-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
           destination: release
@@ -81,7 +147,7 @@ jobs:
       xcode: "14.0.0"
     resource_class: large
     environment:
-      GRAALVM_HOME: /Users/distiller/graalvm-ce-java11-22.3.0/Contents/Home
+      GRAALVM_HOME: /Users/distiller/graalvm-community-openjdk-21.0.2+13.1/Contents/Home
       APP_PLATFORM: macos # used in release script
       APP_TEST_ENV: native
     steps:
@@ -107,9 +173,9 @@ jobs:
           command: |
             cd ~
             ls -la
-            if ! [ -d graalvm-ce-java11-22.3.0 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java11-darwin-amd64-22.3.0.tar.gz
-              tar xzf graalvm-ce-java11-darwin-amd64-22.3.0.tar.gz
+            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_macos-x64_bin.tar.gz
+              tar xzf graalvm-community-jdk-21.0.2_macos-x64_bin.tar.gz
             fi
       - run:
           name: Install bb
@@ -136,14 +202,14 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java11-22.3.0
+            - ~/graalvm-community-openjdk-21.0.2+13.1
           key: mac-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
           destination: release
   deploy:
     docker:
-      - image: circleci/clojure:openjdk-11-lein-2.9.6-bullseye
+      - image: cimg/clojure:1.11.1-openjdk-17.0
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
@@ -180,6 +246,7 @@ workflows:
     jobs:
 #      - jvm
       - linux
+      - linux-aarch64
       - mac
       - deploy:
           filters:
