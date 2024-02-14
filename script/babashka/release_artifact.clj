@@ -23,7 +23,7 @@
         current-version
         (-> (slurp "resources/TDN_VERSION")
             str/trim)]
-    (if (and ght (contains? #{"master" "main"} branch))
+    (if ght #_(and ght (contains? #{"master" "main"} branch))
       (do (assert file "File name must be provided")
           (println "On main branch. Publishing asset.")
           (ghr/overwrite-asset {:org "borkdude"
@@ -31,7 +31,7 @@
                                 :file file
                                 :tag (str "v" current-version)
                                 :draft true
-                                :overwrite (str/ends-with? current-version "SNAPSHOT")
+                                :overwrite true #_(str/ends-with? current-version "SNAPSHOT")
                                 :sha256 true}))
       (println "Skipping release artifact (no GITHUB_TOKEN or not on main branch)"))
     nil))
