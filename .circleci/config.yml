@@ -42,9 +42,11 @@ jobs:
       - run:
           name: Install bb
           command: |
-            # bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
-            # sudo mv bb /usr/local/bin
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
+            sudo mv bb /usr/local/bin
             bb --version
+            /usr/local/bin/bb --version
+
       - run:
           name: Build binary
           command: |
@@ -117,6 +119,7 @@ jobs:
             bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
             sudo mv bb /usr/local/bin
             bb --version
+            /usr/local/bin/bb --version
       - run:
           name: Build binary
           command: |
