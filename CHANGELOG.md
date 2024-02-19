@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.6
+
+- Revert tools.deps to `v0.18.1354` which tools.build uses
+
 ## v0.1.5
 
 - Fix NPE when `deps.edn` doesn't exist
