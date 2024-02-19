@@ -19,7 +19,7 @@
 
 (fs/copy native-executable "tools.bbuild" {:replace-existing true})
 
-#_(shell {:dir "tools.bbuild"} "bb test")
+(shell {:dir "tools.bbuild"} "bb test")
 
 (shell native-executable "create-basis" '{:extra {:deps {buddy/buddy-core {:mvn/version "1.10.1"}}}})
 
