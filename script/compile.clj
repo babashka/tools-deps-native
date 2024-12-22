@@ -53,7 +53,9 @@
            "--verbose"
            "--no-fallback"
            "--no-server"
-           "--allow-incomplete-classpath"]
+           "--allow-incomplete-classpath"
+           "-march=compatibility"
+           "-O1"]
     (= "true" (System/getenv "BABASHKA_MUSL"))
     (conj "--static"
           "--libc=musl"
