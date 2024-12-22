@@ -51,6 +51,7 @@
            "--initialize-at-build-time=org.eclipse.aether.transport.http.HttpTransporterFactory"
            "--initialize-at-build-time=org.eclipse.aether.transport.http.Nexus2ChecksumExtractor"
            "--initialize-at-build-time=org.eclipse.aether.transport.http.XChecksumChecksumExtractor"
+           "--initialize-at-build-time=org.eclipse.aether.util.version.GenericVersionScheme"
            "--report-unsupported-elements-at-runtime"
            "--verbose"
            "--no-fallback"
