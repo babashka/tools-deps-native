@@ -50,6 +50,7 @@
            (str "--initialize-at-build-time=" init-at-build-time ",cognitect,aws,org.slf4j")
            "--initialize-at-build-time=org.eclipse.aether.transport.http.HttpTransporterFactory"
            "--initialize-at-build-time=org.eclipse.aether.transport.http.Nexus2ChecksumExtractor"
+           "--initialize-at-build-time=org.eclipse.aether.transport.http.XChecksumChecksumExtractor"
            "--report-unsupported-elements-at-runtime"
            "--verbose"
            "--no-fallback"
