@@ -54,6 +54,7 @@ build_script:
 
 - cmd: >-
     where java
+    where cl
 
     call bb script/compile.clj
 
