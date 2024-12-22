@@ -17,6 +17,7 @@ jobs:
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
       BABASHKA_MUSL: true
+      BABASHKA_PLATFORM: linux
     steps:
       - run:
           name: Get rid of erroneous git config
@@ -83,6 +84,7 @@ jobs:
       BABASHKA_STATIC: true
       BABASHKA_MUSL: false
       BABASHKA_ARCH: aarch64
+      BABASHKA_PLATFORM: linux
     steps:
       - run:
           name: Get rid of erroneous git config
@@ -147,6 +149,7 @@ jobs:
       APP_PLATFORM: macos # used in release script
       APP_TEST_ENV: native
       GRAALVM_VERSION: "23"
+      BABASHKA_PLATFORM: macos
     steps:
       - checkout
       - run:
