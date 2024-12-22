@@ -17,7 +17,8 @@ cache:
   - 'graalvm -> appveyor.yml'
 
 install:
- - set PATH=%GRAALVM_HOME%\bin;%PATH%
+  - set JAVA_HOME=%GRAALVM_HOME%
+  - set PATH=%GRAALVM_HOME%\bin;%PATH%
 
 clone_script:
 - ps: >-
