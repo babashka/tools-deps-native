@@ -3,8 +3,8 @@ macos_instance:
 
 task:
   env:
-    GRAALVM_VERSION: "21.0.2"
-    GRAALVM_HOME: ${HOME}/graalvm-community-openjdk-21.0.2+13.1/Contents/Home
+    GRAALVM_VERSION: "23"
+    GRAALVM_HOME: ${HOME}/graalvm-${GRAALVM_VERSION}/Contents/Home
     TDN_PLATFORM: macos # used in release script
     TDN_ARCH: aarch64
     TDN_TEST_ENV: native
