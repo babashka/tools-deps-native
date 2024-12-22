@@ -10,6 +10,7 @@ environment:
   GRAALVM_HOME: C:\projects\babashka\graalvm\graalvm-jdk-23+37.1
   BABASHKA_XMX: "-J-Xmx5g"
   JAVA_HOME: C:\projects\babashka\graalvm\graalvm-jdk-23+37.1
+  VSINSTALLDIR: C:\Program Files\Microsoft Visual Studio\2022
 
 cache:
   - '%USERPROFILE%\.m2 -> deps.edn'
