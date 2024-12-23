@@ -67,8 +67,8 @@
 
 (spit "native-image-args.txt" (str/join " " args))
 
-(prn (cons (native-bin "native-image")
-           args))
+(prn :install-dir (System/getenv "VSINSTALLDIR"))
+
 (shell {:extra-env extra-env}
        (native-bin "native-image")
        app_ns "@native-image-args.txt")

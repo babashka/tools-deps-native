@@ -14,9 +14,10 @@
                                 "Windows"))
 
 (def extra-env {"JAVA_HOME" graalvm-home
-                "PATH" (str (fs/file graalvm-home "bin") fs/path-separator
-                            (str (fs/file graalvm-home "bin" "lib" "svm" "macros"))
-                            (System/getenv "PATH"))})
+                "PATH" (str/join fs/path-separator
+                                 [(fs/file graalvm-home "bin")
+                                  ;; (fs/file graalvm-home "bin" "lib" "svm" "macros")
+                                  (System/getenv "PATH")])})
 
 (defn native-bin [prog]
   (let [prog (str (fs/file native-image-dir prog))]
