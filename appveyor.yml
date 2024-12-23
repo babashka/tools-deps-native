@@ -60,6 +60,10 @@ build_script:
 
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 
+    echo $PATH
+
+    dir %VSINSTALLDIR%\bin
+
     where cl
 
     call bb script/compile.clj
