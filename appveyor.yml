@@ -10,17 +10,11 @@ environment:
   GRAALVM_HOME: C:\projects\babashka\graalvm\graalvm-jdk-23+37.1
   BABASHKA_XMX: "-J-Xmx5g"
   JAVA_HOME: C:\projects\babashka\graalvm\graalvm-jdk-23+37.1
-  VSINSTALLDIR: C:\Program Files\Microsoft Visual Studio\2022\Community
 
 cache:
   - '%USERPROFILE%\.m2 -> deps.edn'
   - '%USERPROFILE%\.gitlibs -> deps.edn'
   - 'graalvm -> appveyor.yml'
-
-install:
-  - set JAVA_HOME=%GRAALVM_HOME%
-  - set PATH=%GRAALVM_HOME%\bin;%VSINSTALLDIR%\bin;%PATH%
-  - echo %PATH%
 
 clone_script:
 - ps: >-
@@ -56,17 +50,17 @@ build_script:
     powershell -Command "if (Test-Path('bb.exe')) { return } else { Expand-Archive bb.zip . }"
 
 - cmd: >-
+
+    set JAVA_HOME=%GRAALVM_HOME%
+    set PATH=%GRAALVM_HOME%\bin;%PATH%
+
     where java
-
-    echo %VSINSTALLDIR%
-
-    call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 
     echo %VSINSTALLDIR%
 
     echo %PATH%
 
-    dir %VSINSTALLDIR%
+    dir "%VSINSTALLDIR%"
 
     where cl
 
