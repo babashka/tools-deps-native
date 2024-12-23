@@ -66,7 +66,7 @@ build_script:
 
     echo %PATH%
 
-    dir %VSINSTALLDIR%\bin
+    dir %VSINSTALLDIR%
 
     where cl
 
