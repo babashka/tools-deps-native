@@ -19,7 +19,7 @@ cache:
 
 install:
   - set JAVA_HOME=%GRAALVM_HOME%
-  - set PATH=%GRAALVM_HOME%\bin;%VSINSTALLDIR%;%PATH%
+  - set PATH=%GRAALVM_HOME%\bin;%VSINSTALLDIR%\bin;%PATH%
   - echo %PATH%
 
 clone_script:
