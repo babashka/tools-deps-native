@@ -80,8 +80,6 @@ build_script:
 
     where cl
 
-    dddd
-
     call bb script/compile.clj
 
 - cmd: >-
