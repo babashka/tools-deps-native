@@ -14,7 +14,7 @@
 
 (def native-executable
   (if windows?
-    "tools-deps-native.exe"
+    "./tools-deps-native.exe"
     "./tools-deps-native"))
 
 (fs/copy native-executable "tools.bbuild" {:replace-existing true})
