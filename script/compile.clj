@@ -14,11 +14,6 @@
 (fs/delete-tree "tools-deps-native")
 (fs/create-dir "classes")
 
-(println "java version")
-(clojure "-M" "-e" "(System/getProperty \"java.version\")")
-
-(System/exit 1)
-
 (clojure {:extra-env extra-env}
          "-M:compile-main")
 
