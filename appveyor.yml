@@ -55,15 +55,18 @@ build_script:
 
     java -version
 
-    echo %VSINSTALLDIR%
-
-    call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+    REM set the PATH only after you ran vcvars64 since it wipes the existing PATH
 
     set JAVA_HOME=%GRAALVM_HOME%
 
     set PATH=%GRAALVM_HOME%\bin;%PATH%
 
     echo %PATH%
+
+    echo %VSINSTALLDIR%
+
+    call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+
 
     echo "%VSINSTALLDIR%"
 
@@ -73,7 +76,7 @@ build_script:
 
     where cl
 
-    REM call bb script/compile.clj
+    call bb script/compile.clj
 
 - cmd: >-
     echo Creating zip archive
