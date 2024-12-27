@@ -7,10 +7,10 @@
 (if (fs/exists? "tools.bbuild")
   (do
     (shell {:dir "tools.bbuild"} "git fetch origin")
-    (shell {:dir "tools.bbuild"} "git checkout babashka")
+    (shell {:dir "tools.bbuild"} "git checkout retrigger")
     (shell {:dir "tools.bbuild"} "git pull"))
   (do (shell "git clone https://github.com/babashka/tools.bbuild")
-      (shell {:dir "tools.bbuild"} "git checkout babashka")))
+      (shell {:dir "tools.bbuild"} "git checkout retrigger")))
 
 (def native-executable
   (if windows?
