@@ -60,7 +60,9 @@ build_script:
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 
     set JAVA_HOME=%GRAALVM_HOME%
+
     set PATH=%GRAALVM_HOME%\bin;%PATH%
+
     echo %PATH%
 
     echo "%VSINSTALLDIR%"
