@@ -53,6 +53,7 @@ build_script:
 
     set JAVA_HOME=%GRAALVM_HOME%
     set PATH=%GRAALVM_HOME%\bin;%PATH%
+    echo %PATH%
 
     where java
 
@@ -68,7 +69,7 @@ build_script:
 
     where cl
 
-    call bb script/compile.clj
+    REM call bb script/compile.clj
 
 - cmd: >-
     echo Creating zip archive
