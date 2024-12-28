@@ -11,11 +11,13 @@ jobs:
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-community-openjdk-21.0.2+13.1
+      GRAALVM_VERSION: '23'
+      GRAALVM_HOME: /home/circleci/graalvm-23
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
       BABASHKA_MUSL: true
+      BABASHKA_PLATFORM: linux
     steps:
       - run:
           name: Get rid of erroneous git config
@@ -34,15 +36,11 @@ jobs:
       - run:
           name: Download GraalVM
           command: |
-            cd ~
-            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
-              tar xzf graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
-            fi
+            script/install-graalvm
       - run:
           name: Install bb
           command: |
-            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd)
             sudo mv bb /usr/local/bin
             bb --version
             /usr/local/bin/bb --version
@@ -79,12 +77,14 @@ jobs:
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-community-openjdk-21.0.2+13.1
+      GRAALVM_VERSION: "23"
+      GRAALVM_HOME: /home/circleci/graalvm-23
       APP_PLATFORM: linux # used in release script
       APP_TEST_ENV: native
       BABASHKA_STATIC: true
       BABASHKA_MUSL: false
       BABASHKA_ARCH: aarch64
+      BABASHKA_PLATFORM: linux
     steps:
       - run:
           name: Get rid of erroneous git config
@@ -108,15 +108,11 @@ jobs:
       - run:
           name: Download GraalVM
           command: |
-            cd ~
-            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-aarch64_bin.tar.gz
-              tar xzf graalvm-community-jdk-21.0.2_linux-aarch64_bin.tar.gz
-            fi
+            script/install-graalvm
       - run:
           name: Install bb
           command: |
-            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd)
             sudo mv bb /usr/local/bin
             bb --version
             /usr/local/bin/bb --version
@@ -140,19 +136,20 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-community-openjdk-21.0.2+13.1
           key: linux-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
           destination: release
   mac:
     macos:
-      xcode: "15.2.0"
-    resource_class: "macos.x86.medium.gen2"
+      xcode: "13.4.1"
+    resource_class: "macos.m1.medium.gen1"
     environment:
-      GRAALVM_HOME: /Users/distiller/graalvm-community-openjdk-21.0.2+13.1/Contents/Home
+      GRAALVM_HOME: /Users/distiller/graalvm-23/Contents/Home
       APP_PLATFORM: macos # used in release script
       APP_TEST_ENV: native
+      GRAALVM_VERSION: "23"
+      BABASHKA_PLATFORM: macos
     steps:
       - checkout
       - run:
@@ -162,6 +159,9 @@ jobs:
       - restore_cache:
           keys:
             - mac-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
+      - run:
+          name: Install Rosetta
+          command: sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license
       - run:
           name: Install Clojure
           command: |
@@ -174,16 +174,11 @@ jobs:
       - run:
           name: Download GraalVM
           command: |
-            cd ~
-            ls -la
-            if ! [ -d graalvm-community-openjdk-21.0.2+13.1 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_macos-x64_bin.tar.gz
-              tar xzf graalvm-community-jdk-21.0.2_macos-x64_bin.tar.gz
-            fi
+            script/install-graalvm
       - run:
           name: Install bb
           command: |
-            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd) --dev-build
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir $(pwd)
             sudo mv bb /usr/local/bin
       - run:
           name: Build binary
@@ -205,7 +200,6 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-community-openjdk-21.0.2+13.1
           key: mac-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release

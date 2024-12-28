@@ -1,8 +1,7 @@
 (ns test
   (:require [babashka.fs :as fs]
             [babashka.tasks :refer [shell]]
-            [graalvm :refer [windows?]]
-            [clojure.edn :as edn]))
+            [graalvm :refer [windows?]]))
 
 (if (fs/exists? "tools.bbuild")
   (do
@@ -14,7 +13,7 @@
 
 (def native-executable
   (if windows?
-    "tools-deps-native.exe"
+    "./tools-deps-native.exe"
     "./tools-deps-native"))
 
 (fs/copy native-executable "tools.bbuild" {:replace-existing true})

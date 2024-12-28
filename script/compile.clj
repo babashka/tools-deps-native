@@ -49,11 +49,16 @@
            "-J-Dclojure.compiler.direct-linking=true"
            (str "--initialize-at-build-time=" init-at-build-time ",cognitect,aws,org.slf4j")
            "--initialize-at-build-time=org.eclipse.aether.transport.http.HttpTransporterFactory"
+           "--initialize-at-build-time=org.eclipse.aether.transport.http.Nexus2ChecksumExtractor"
+           "--initialize-at-build-time=org.eclipse.aether.transport.http.XChecksumChecksumExtractor"
+           "--initialize-at-build-time=org.eclipse.aether.util.version.GenericVersionScheme"
            "--report-unsupported-elements-at-runtime"
            "--verbose"
            "--no-fallback"
            "--no-server"
-           "--allow-incomplete-classpath"]
+           "--allow-incomplete-classpath"
+           "-march=compatibility"
+           "-O1"]
     (= "true" (System/getenv "BABASHKA_MUSL"))
     (conj "--static"
           "--libc=musl"
@@ -62,8 +67,8 @@
 
 (spit "native-image-args.txt" (str/join " " args))
 
-(prn (cons (native-bin "native-image")
-           args))
+(prn :install-dir (System/getenv "VSINSTALLDIR"))
+
 (shell {:extra-env extra-env}
        (native-bin "native-image")
        app_ns "@native-image-args.txt")
