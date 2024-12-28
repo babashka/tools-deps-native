@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.7 (Unreleased)
+
+- Fix [#30](https://github.com/babashka/tools-deps-native/issues/30): pod won't run on newer versions of macOS
+
 ## v0.1.6
 
 - Revert tools.deps to `v0.18.1354` which tools.build uses
