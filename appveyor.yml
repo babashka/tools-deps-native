@@ -51,6 +51,8 @@ build_script:
 
 - cmd: >-
 
+    call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+
     where java
 
     java -version
@@ -64,19 +66,6 @@ build_script:
     echo %PATH%
 
     echo %VSINSTALLDIR%
-
-    call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-
-
-    where java
-
-    java -version
-
-    echo "%VSINSTALLDIR%"
-
-    echo %PATH%
-
-    dir "%VSINSTALLDIR%"
 
     where cl
 

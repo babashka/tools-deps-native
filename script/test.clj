@@ -1,16 +1,15 @@
 (ns test
   (:require [babashka.fs :as fs]
             [babashka.tasks :refer [shell]]
-            [graalvm :refer [windows?]]
-            [clojure.edn :as edn]))
+            [graalvm :refer [windows?]]))
 
 (if (fs/exists? "tools.bbuild")
   (do
     (shell {:dir "tools.bbuild"} "git fetch origin")
-    (shell {:dir "tools.bbuild"} "git checkout retrigger")
+    (shell {:dir "tools.bbuild"} "git checkout babashka")
     (shell {:dir "tools.bbuild"} "git pull"))
   (do (shell "git clone https://github.com/babashka/tools.bbuild")
-      (shell {:dir "tools.bbuild"} "git checkout retrigger")))
+      (shell {:dir "tools.bbuild"} "git checkout babashka")))
 
 (def native-executable
   (if windows?
