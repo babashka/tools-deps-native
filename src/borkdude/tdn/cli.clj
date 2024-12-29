@@ -58,7 +58,7 @@ Note that it's possible no file may exist at this location."))
     (println "tools.deps.edn ...
 
           help  show this help message
-          deps  output a claspath map from a deps map
+          deps  output a classpath map from a deps map
   create-basis  output a basis from a set of deps sources and a set of aliases
      root-deps  output the root deps.edn
     slurp-deps  read, canonicalize and output a deps.edn file
