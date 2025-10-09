@@ -142,7 +142,7 @@ jobs:
           destination: release
   mac:
     macos:
-      xcode: "13.4.1"
+      xcode: "14.0.1"
     resource_class: "macos.m1.medium.gen1"
     environment:
       GRAALVM_HOME: /Users/distiller/graalvm-23/Contents/Home
